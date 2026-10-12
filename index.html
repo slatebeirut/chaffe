@@ -136,6 +136,25 @@ section{padding:120px 0}
 .aud li svg{width:18px;height:18px;color:var(--accent);flex-shrink:0}
 .aud.cafe li svg{color:var(--accent2)}
 
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px}
+.rule{display:flex;gap:14px;align-items:center;padding:18px 20px;border:1px solid var(--line);border-radius:14px;background:var(--bg2);font-size:14px;color:var(--muted)}
+.rule b{font-family:Fraunces,serif;font-size:24px;color:var(--accent);font-weight:500;flex-shrink:0}
+
+/* plan */
+.plan{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.phases{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:16px;align-items:stretch}
+.phase{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:32px}
+.phase .tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);border:1px solid rgba(219,164,90,.35);border-radius:999px;padding:5px 10px;margin-bottom:16px}
+.phase h3{font-size:26px;margin-bottom:14px}
+.phase ul{list-style:none;display:grid;gap:10px;font-size:14px;color:var(--muted)}
+.phase li{padding-left:18px;position:relative}
+.phase li::before{content:"";position:absolute;left:0;top:9px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.gate{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:8px;padding:0 6px;max-width:150px}
+.gate span{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);background:rgba(154,216,120,.1);border:1px solid rgba(154,216,120,.3);border-radius:999px;padding:5px 10px}
+.gate b{font-weight:500;font-size:12px;color:var(--muted);line-height:1.5}
+.fine{display:block;text-align:center;font-size:12px;color:var(--muted);margin-top:4px}
+
 /* contact */
 .contact{position:relative;overflow:hidden}
 .contact .bgimg{position:absolute;inset:0;z-index:0}
@@ -174,7 +193,10 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
   .scroll{display:none}
   .stats .wrap{grid-template-columns:1fr 1fr;gap:24px 0}
   .stat:nth-child(3){border-left:0;padding-left:0}
-  .steps,.bgrid,.split,.contact .wrap,.feature .wrap{grid-template-columns:1fr}
+  .steps,.bgrid,.split,.contact .wrap,.feature .wrap,.phases{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr 1fr}
+  .gate{max-width:none;flex-direction:row;justify-content:flex-start;text-align:left;padding:4px 8px}
+  .gate b br{display:none}
   .feature .wrap{gap:48px}
   section{padding:80px 0}
   .aud{padding:36px 28px;min-height:440px}
@@ -196,8 +218,9 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
       <a href="#why">Why grounds</a>
       <a href="#benefits">Benefits</a>
       <a href="#partners">Partners</a>
+      <a href="#plan">Our plan</a>
     </div>
-    <a href="#contact" class="btn btn-primary">Get started</a>
+    <a href="#contact" class="btn btn-primary" data-stage="tap" data-cta="nav-pickup">Free first pickup</a>
   </div>
 </nav>
 
@@ -205,22 +228,22 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
   <div class="hero-bg"><img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=2000&q=80" alt="Portafilters with espresso, fresh grounds and roasted beans"></div>
   <div class="wrap">
     <div>
-      <span class="eyebrow">From café to farm</span>
-      <h1>Coffee waste, <em>reborn</em> as soil.</h1>
-      <p>Chaffe collects the used coffee pucks cafés throw away and delivers them to farms as natural fertilizer.</p>
+      <span class="eyebrow">Mar Mikhael and Gemmayzeh, Beirut</span>
+      <h1>Your coffee bin, <em>emptied</em> for free.</h1>
+      <p>Wet grounds fill your bin by noon and go out with the trash. Chaffe picks them up on a fixed day, free, and turns them into soil for farms nearby.</p>
       <div class="cta">
-        <a href="#contact" class="btn btn-primary">Partner with us <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a href="#how" class="btn btn-ghost">How it works</a>
+        <a href="#contact" class="btn btn-primary" data-stage="tap" data-cta="hero-pickup">Book a free first pickup <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-ghost wa" data-stage="message" data-cta="hero-wa" data-msg="Hi Chaffe, I run a café and I would like a free first pickup." href="#">WhatsApp us</a>
       </div>
     </div>
     <div class="hero-side">
       <div class="pill r">
         <div class="icon warm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h14v7a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8z"/><path d="M17 10h2a2 2 0 0 1 0 4h-2M7 3v2M11 3v2M15 3v2"/></svg></div>
-        <div><b>Cafés</b><span>Free pickup. Zero effort.</span></div>
+        <div><b>Cafés</b><span>One small ask: a free first pickup.</span></div>
       </div>
       <div class="pill r">
         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7z"/><path d="M12 15c0-3-2.5-5.5-6-5.5 0 3 2.5 5.5 6 5.5z"/><path d="M5 21h14"/></svg></div>
-        <div><b>Farmers</b><span>Organic nutrition. Delivered.</span></div>
+        <div><b>Farms within 30 min</b><span>One small ask: a free trial sack.</span></div>
       </div>
     </div>
   </div>
@@ -236,10 +259,10 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
 
 <div class="stats">
   <div class="wrap">
-    <div class="stat r"><b><span data-count="100">0</span><small>%</small></b><span>of grounds diverted from landfill</span></div>
-    <div class="stat r"><b><span data-count="2">0</span><small>%</small></b><span>nitrogen content by weight</span></div>
+    <div class="stat r"><b><span data-count="10">0</span></b><span>cafés in our first two streets</span></div>
+    <div class="stat r"><b><span data-count="1">0</span></b><span>farm, one van, same route</span></div>
     <div class="stat r"><b><span data-count="0">0</span><small>$</small></b><span>cost to cafés. Ever.</span></div>
-    <div class="stat r"><b><span data-count="48">0</span><small>h</small></b><span>from café to field</span></div>
+    <div class="stat r"><b><span data-count="24">0</span><small>h</small></b><span>to hear back from us</span></div>
   </div>
 </div>
 
@@ -274,6 +297,12 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
           <p>Farmers work the grounds into soil for richer, healthier harvests.</p>
         </div>
       </div>
+    </div>
+    <div class="rules">
+      <div class="rule r"><b>1</b><span>We start with your problem, not our product.</span></div>
+      <div class="rule r"><b>2</b><span>One small ask. A pickup day, never a contract.</span></div>
+      <div class="rule r"><b>3</b><span>We leave a drum, a sheet and a date.</span></div>
+      <div class="rule r"><b>4</b><span>We follow up within 24 hours.</span></div>
     </div>
   </div>
 </section>
@@ -338,27 +367,68 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
     <div class="split">
       <div class="aud cafe r">
         <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1000&q=75" alt="Friends holding cups of coffee" loading="lazy">
-        <span class="eyebrow warm">For cafés</span>
-        <h3>Waste less. Pay nothing.</h3>
-        <p>We handle pickup, bins and logistics. You keep brewing.</p>
+        <span class="eyebrow warm">Cafés</span>
+        <h3>A full, wet bin by noon.</h3>
+        <p>We bring a sealed drum with your pickup day written on it. Same day every week. A receipt each time.</p>
         <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Free bins and scheduled pickups</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Lower waste disposal costs</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Chaffe partner badge for your shop</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Free drum, free pickup, no contract</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Less trash, no smell behind the bar</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>A Chaffe sticker for your door</li>
         </ul>
-        <div><a href="#contact" class="btn btn-ghost">Join as a café</a></div>
+        <div><a class="btn btn-ghost wa" data-stage="message" data-cta="cafe-wa" data-msg="Hi Chaffe, I run a café and I would like a free first pickup." href="#">Book a free first pickup</a></div>
       </div>
       <div class="aud farm r">
         <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1000&q=75" alt="Farm field at sunrise" loading="lazy">
-        <span class="eyebrow">For farmers</span>
-        <h3>Better soil. Lower cost.</h3>
-        <p>Screened, dried grounds delivered to your gate.</p>
+        <span class="eyebrow">Farms and nurseries</span>
+        <h3>Fertilizer prices keep climbing.</h3>
+        <p>Dried, screened grounds delivered to your gate every week, at a fraction of the cost of synthetic feed.</p>
         <ul>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Bulk pricing, far below synthetic fertilizer</li>
-          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>Consistent weekly supply</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>First trial sack is free</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>We agree the result to measure before we start</li>
           <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>100% organic, chemical free</li>
         </ul>
-        <div><a href="#contact" class="btn btn-primary">Order grounds</a></div>
+        <div><a class="btn btn-primary wa" data-stage="message" data-cta="farm-wa" data-msg="Hi Chaffe, I have a farm and I would like a free trial sack of coffee grounds." href="#">Get a free trial sack</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="plan" class="plan">
+  <div class="wrap">
+    <div class="head r">
+      <span class="eyebrow">Where we start</span>
+      <h2>Two streets first. Then the city.</h2>
+      <p>One van serves both ends of the loop. We only move to the next phase when the gate is met.</p>
+    </div>
+    <div class="phases">
+      <div class="phase r">
+        <span class="tag">Phase 1</span>
+        <h3>Beachhead</h3>
+        <ul>
+          <li>10 cafés in Mar Mikhael and Gemmayzeh</li>
+          <li>1 farm within 30 minutes</li>
+          <li>Same van, same streets, one pickup day</li>
+        </ul>
+      </div>
+      <div class="gate r"><span>Gate 1</span><b>8 cafés on a weekly pickup<br>1 farm taking every sack</b></div>
+      <div class="phase r">
+        <span class="tag">Phase 2</span>
+        <h3>Adjacent</h3>
+        <ul>
+          <li>All 50 cafés in Achrafieh and Hamra</li>
+          <li>3 farms and the first nursery</li>
+          <li>Second pickup day</li>
+        </ul>
+      </div>
+      <div class="gate r"><span>Gate 2</span><b>30 cafés supplying<br>750 kg a week</b></div>
+      <div class="phase r">
+        <span class="tag">Phase 3</span>
+        <h3>Scale</h3>
+        <ul>
+          <li>A café chain head office</li>
+          <li>Beirut suburbs and a second city</li>
+          <li>Municipality compost pilot</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -369,24 +439,30 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
   <div class="wrap">
     <div class="r">
       <span class="eyebrow">Get started</span>
-      <h2>Close the loop with Chaffe.</h2>
-      <p>Tell us who you are. We reply within one business day.</p>
+      <h2>Pick a day. We show up.</h2>
+      <p>Tell us where you are and the day that suits you. We reply on WhatsApp within 24 hours, with a date.</p>
       <div class="contact-meta">
+        <a class="wa" data-stage="message" data-cta="contact-wa" data-msg="Hi Chaffe, I would like to book a pickup." href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-13.4 7.8L3 21l1.3-4.4A9 9 0 1 1 21 12z"/></svg>WhatsApp us directly</a>
         <a href="mailto:hello@chaffe.co"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>hello@chaffe.co</a>
-        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Beirut, Lebanon</a>
+        <a href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>Mar Mikhael, Beirut</a>
       </div>
     </div>
-    <form class="r" onsubmit="event.preventDefault();this.innerHTML='<p style=\'text-align:center;padding:30px;color:var(--accent);font-size:18px\'>Thank you. We will be in touch.</p>'">
+    <form class="r" id="lead">
       <div class="row">
-        <label>Name<input type="text" required placeholder="Your name"></label>
-        <label>Email<input type="email" required placeholder="you@email.com"></label>
+        <label>Name<input type="text" name="name" required placeholder="Your name"></label>
+        <label>WhatsApp number<input type="tel" name="phone" required placeholder="03 123 456"></label>
       </div>
       <div class="row">
-        <label>I am a<select required><option value="">Select</option><option>Café</option><option>Farmer</option><option>Other</option></select></label>
-        <label>City<input type="text" placeholder="City"></label>
+        <label>I am a<select name="type" required><option value="">Select</option><option>Café</option><option>Farm or nursery</option><option>Other</option></select></label>
+        <label>Shop or farm name<input type="text" name="place" required placeholder="Name and street"></label>
       </div>
-      <label>Message<textarea placeholder="Anything we should know"></textarea></label>
-      <button class="btn btn-primary" type="submit">Send</button>
+      <div class="row">
+        <label>Best day<select name="day"><option>Any day</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option></select></label>
+        <label>Best time<select name="time"><option>Morning</option><option>3 to 5 pm</option><option>Evening</option></select></label>
+      </div>
+      <input type="hidden" name="src" id="src">
+      <button class="btn btn-primary" type="submit" data-stage="form" data-cta="form-submit">Book my free first pickup</button>
+      <small class="fine">Opens WhatsApp with your details filled in. No contract, no cost.</small>
     </form>
   </div>
 </section>
@@ -409,6 +485,29 @@ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.targ
 document.querySelectorAll('.r').forEach((el,i)=>{el.style.transitionDelay=(i%3)*90+'ms';io.observe(el)});
 const co=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target,t=+el.dataset.count;let s=0;const step=()=>{s=Math.min(t,s+Math.max(1,t/40));el.textContent=Math.round(s);if(s<t)requestAnimationFrame(step)};step();co.unobserve(el)}),{threshold:.5});
 document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+
+/* Funnel: every link carries its source. Set the number before printing QR codes. */
+const WA_NUMBER='96103000000';
+const q=new URLSearchParams(location.search);
+let src=q.get('src')||q.get('utm_source')||'';
+try{if(src)sessionStorage.setItem('src',src);else src=sessionStorage.getItem('src')||'';}catch(e){}
+src=src||'direct';
+document.getElementById('src').value=src;
+const wa=(msg)=>'https://wa.me/'+WA_NUMBER+'?text='+encodeURIComponent(msg+' (via '+src+')');
+document.querySelectorAll('a.wa').forEach(a=>{a.href=wa(a.dataset.msg);a.target='_blank';a.rel='noopener'});
+document.querySelectorAll('[data-stage]').forEach(el=>el.addEventListener('click',()=>{
+  const ev={stage:el.dataset.stage,cta:el.dataset.cta,src};
+  if(window.va)va('event',{name:ev.stage,data:ev});
+  try{const log=JSON.parse(localStorage.getItem('chaffe_taps')||'[]');log.push({...ev,t:Date.now()});localStorage.setItem('chaffe_taps',JSON.stringify(log.slice(-200)))}catch(e){}
+}));
+document.getElementById('lead').addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=new FormData(e.target),g=k=>f.get(k)||'';
+  const msg=`Hi Chaffe, I would like a free first ${g('type')==='Café'?'pickup':'trial sack'}.\nName: ${g('name')}\nType: ${g('type')}\nPlace: ${g('place')}\nWhatsApp: ${g('phone')}\nBest time: ${g('day')}, ${g('time')}`;
+  window.open(wa(msg),'_blank','noopener');
+  e.target.innerHTML='<p style="text-align:center;padding:30px;color:var(--accent);font-size:18px">Thanks. Expect a date from us within 24 hours.</p>';
+});
 </script>
+<script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>
