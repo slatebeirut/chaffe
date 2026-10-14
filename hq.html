@@ -207,16 +207,25 @@ const STAGES=[
   ['Referrer','Sent us another customer']
 ];
 const SEGMENTS=['Home gardener','Small farmer','Nursery','Landscaper','Roastery (supplier)','Service supplier','Partner'];
-const OWNERS=['Marc','Teammate 2','Teammate 3','Teammate 4'];
+const OWNERS=['Tamara','Wafik','Marc','Rayan','Nour'];
 const SOURCES=['Direct outreach','WhatsApp','Instagram','Roastery referral','Website','Event','QR code'];
 
 /* ---------- SEED DATA (from the unit economics sheet and the canvas) ---------- */
 const SEED_LEADS=[
-  {name:'Amer Darkhbany roastery',seg:'Roastery (supplier)',stage:'Opportunity',value:0,owner:'Marc',date:'2026-10-02',src:'Direct outreach',next:'Agree a fixed pickup day and do the first 10 kg pickup',nextDate:'2026-10-16',notes:'Quoted $1.00 per 0.5 kg ($2/kg). Supply beachhead.'},
-  {name:'Pik&Drop',seg:'Service supplier',stage:'Qualified',value:0,owner:'Marc',date:'2026-10-02',src:'WhatsApp',next:'Book first Greater Beirut pickup at $4',nextDate:'2026-10-16',notes:'$3.50 Beirut, $4 Greater Beirut, $4.50 outside.'},
-  {name:'Home gardener 1 (name them)',seg:'Home gardener',stage:'Prospect',value:6,owner:'Teammate 2',date:'',src:'Direct outreach',next:'Offer a free trial bag, 2 minute demo',nextDate:'',notes:'Beachhead demand. Replace with a real name.'},
-  {name:'Small farmer 1 (name them)',seg:'Small farmer',stage:'Prospect',value:30,owner:'Teammate 3',date:'',src:'WhatsApp',next:'Ask for the owner, 30 seconds on fertilizer cost',nextDate:'',notes:'Replace with a real name.'},
-  {name:'Nursery 1 (name them)',seg:'Nursery',stage:'Prospect',value:100,owner:'Teammate 4',date:'',src:'Direct outreach',next:'Bring samples and a price list with $5 bulk rate',nextDate:'',notes:'Phase 2 target. Replace with a real name.'}
+  {name:'Amer Darkhbany roastery',seg:'Roastery (supplier)',stage:'Opportunity',value:0,cost:2,owner:'Tamara',date:'2026-10-02',src:'Direct outreach',phone:'76 718607',next:'Agree a fixed weekly pickup day and do the first 10 kg pickup',nextDate:'2026-10-17',notes:'Raw chaff: $1.00 per 0.5 kg = $2.00/kg. Model allows 5% sorting loss. Supply beachhead.'},
+  {name:'Pik&Drop',seg:'Service supplier',stage:'Qualified',value:0,cost:4,owner:'Wafik',date:'2026-10-02',src:'WhatsApp',phone:'App',next:'Book the first Greater Beirut pickup at $4',nextDate:'2026-10-17',notes:'Per trip: $3.50 Beirut, $4.00 Greater Beirut, $4.50 outside Beirut. Base case $4, allocated across usable output.'},
+  {name:'Ubuy Lebanon (kraft pouches)',seg:'Service supplier',stage:'Lead',value:0,cost:0.19,owner:'Marc',date:'2026-10-02',src:'Website',phone:'Online',next:'Order the first 100 resealable pouches',nextDate:'2026-10-18',notes:'$0.19 per heat sealable stand-up pouch. Benchmark price, one pouch per finished bag.'},
+  {name:'The Sticky Lab (labels)',seg:'Service supplier',stage:'Lead',value:0,cost:0.065,owner:'Marc',date:'2026-10-02',src:'Website',phone:'Online',next:'Finalize label design, order 100 labels ($6.50)',nextDate:'2026-10-18',notes:'100 = $6.50, 500 = $33, 1,000 = $65. Model uses $0.065 per bag at the 1,000 tier.'},
+  {name:'RAF Lebanon (10 kg scale)',seg:'Service supplier',stage:'Qualified',value:0,cost:3,owner:'Rayan',date:'2026-10-02',src:'Website',phone:'Online',next:'Buy the scale',nextDate:'2026-10-18',notes:'$3.00 one time. Weighing collected chaff and portioning bags.'},
+  {name:'ASSAF Online (impulse sealer)',seg:'Service supplier',stage:'Qualified',value:0,cost:12,owner:'Rayan',date:'2026-10-02',src:'Website',phone:'Online',next:'Buy the PFS impulse sealer',nextDate:'2026-10-18',notes:'From $12.00 one time. Heat seals the final bags in house.'},
+  {name:'IM Trading (Zilan dehydrator)',seg:'Service supplier',stage:'Contacted',value:0,cost:59,owner:'Nour',date:'2026-10-02',src:'Website',phone:'Online',next:'Moisture test a sample first, buy only if drying is needed',nextDate:'2026-10-20',notes:'Zilan 5 tray dehydrator $59.00. Excluded from the base case.'},
+  {name:'Turbo Vision, Elie Nasr (content)',seg:'Service supplier',stage:'Contacted',value:0,cost:800,owner:'Nour',date:'2026-10-02',src:'Direct outreach',phone:'71 726464',next:'Decide after the first 10 paying customers',nextDate:'2026-11-01',notes:'$800 per month for 8 videos. Used in break even only, not in variable cost per bag.'},
+  {name:'Local municipality',seg:'Partner',stage:'Prospect',value:0,cost:0,owner:'Nour',date:'',src:'Direct outreach',phone:'',next:'Formal letter in Arabic, then a meeting through someone they know',nextDate:'2026-10-24',notes:'Waste management compliance. Leave data from their own town and a pilot at no cost.'},
+  {name:'Home gardener 1 (name them)',seg:'Home gardener',stage:'Prospect',value:6,cost:0,owner:'Tamara',date:'',src:'Direct outreach',phone:'',next:'Offer a free trial bag with a 2 minute demo, WhatsApp on day 2 and day 7',nextDate:'2026-10-18',notes:'Beachhead demand. Replace with a real name.'},
+  {name:'Home gardener 2 (name them)',seg:'Home gardener',stage:'Prospect',value:6,cost:0,owner:'Rayan',date:'',src:'Instagram',phone:'',next:'Reply to Instagram interest, offer a free trial bag',nextDate:'2026-10-18',notes:'Replace with a real name.'},
+  {name:'Small farmer 1 (name them)',seg:'Small farmer',stage:'Prospect',value:30,cost:0,owner:'Wafik',date:'',src:'WhatsApp',phone:'',next:'Ask for the owner, 30 seconds on fertilizer cost, leave a sample and a date',nextDate:'2026-10-18',notes:'Replace with a real name.'},
+  {name:'Small farmer 2 (name them)',seg:'Small farmer',stage:'Prospect',value:30,cost:0,owner:'Nour',date:'',src:'Roastery referral',phone:'',next:'Ask Amer for one farmer he knows, then visit with a sample',nextDate:'2026-10-20',notes:'Replace with a real name.'},
+  {name:'Nursery 1 (name them)',seg:'Nursery',stage:'Prospect',value:100,cost:0,owner:'Marc',date:'',src:'Direct outreach',phone:'',next:'Bring samples and a price list with the $5 bulk rate',nextDate:'2026-10-22',notes:'Phase 2 target. Replace with a real name.'}
 ];
 const SEED_CONTACTS=[
   {who:'Amer Darkhbany',role:'Roastery, raw chaff supplier',contact:'76 718607',gave:'$1.00 per 0.5 kg ($2.00/kg). Model allows 5% sorting loss.',status:'Quoted',next:'First pickup, fixed weekly day'},
@@ -258,7 +267,7 @@ const SNAP_FIELDS=[
 const KPI_FIELDS=[['contacted','Contacted this week'],['leads','Leads this week'],['trials','Trial bags out'],['customers','Paying customers'],['kg','Kg collected'],['cac','Cost per customer ($)']];
 
 /* ---------- STORAGE ---------- */
-const K='chaffe_hq_v1';
+const K='chaffe_hq_v2';
 let db;
 const seed=()=>({leads:SEED_LEADS.map((l,i)=>({id:'l'+i,...l})),contacts:SEED_CONTACTS.map((c,i)=>({id:'c'+i,...c})),canvas:Object.fromEntries(CANVAS_BLOCKS.map(b=>[b[0],b[3]])),snap:Object.fromEntries(SNAP_FIELDS.map(f=>[f[0],f[2]])),kpis:{}});
 const CLOUD=!!(SUPABASE_URL&&SUPABASE_ANON_KEY);
@@ -333,7 +342,7 @@ function renderFunnel(){
     ls.forEach(l=>{
       const d=document.createElement('div');d.className='lead';
       const due=l.nextDate&&l.nextDate<=t;
-      d.innerHTML=`<span class="seg ${/supplier/i.test(l.seg)?'sup':''}">${esc(l.seg)}</span><b>${esc(l.name)}</b><div class="m"><span>$${l.value||0} · ${esc(l.owner)}</span><span>${esc(l.date||'')}</span></div>${l.next?`<div class="next ${due?'due':''}">${due?'Due: ':'Next: '}${esc(l.next)}${l.nextDate?' · '+esc(l.nextDate):''}</div>`:''}`;
+      d.innerHTML=`<span class="seg ${/supplier/i.test(l.seg)?'sup':''}">${esc(l.seg)}</span><b>${esc(l.name)}</b><div class="m"><span>${+l.cost?'Cost $'+l.cost:'$'+(l.value||0)} · ${esc(l.owner)}</span><span>${esc(l.phone||l.date||'')}</span></div>${l.next?`<div class="next ${due?'due':''}">${due?'Due: ':'Next: '}${esc(l.next)}${l.nextDate?' · '+esc(l.nextDate):''}</div>`:''}`;
       d.onclick=()=>openLead(l.id);list.appendChild(d);
     });
     board.appendChild(col);
@@ -341,16 +350,18 @@ function renderFunnel(){
   const n=s=>db.leads.filter(l=>l.stage===s).length;
   const won=db.leads.filter(l=>['Customer','Active','Referrer'].includes(l.stage));
   const kp=[['Total in funnel',db.leads.length],['Contacted or further',db.leads.filter(l=>l.stage!=='Prospect').length],['Leads or further',db.leads.filter(l=>!['Prospect','Contacted'].includes(l.stage)).length],['Customers',won.length],['Pipeline value',`$${db.leads.reduce((a,l)=>a+(+l.value||0),0)}`],['Follow ups due',db.leads.filter(l=>l.nextDate&&l.nextDate<=t).length]];
+  OWNERS.forEach(o=>kp.push([o+' owns',db.leads.filter(l=>l.owner===o).length]));
   document.getElementById('kpis').innerHTML=kp.map(([a,b])=>`<div class="kpi"><b>${b}</b><span>${a}</span></div>`).join('');
 }
 function openLead(id){
-  const l=id?db.leads.find(x=>x.id===id):{id:'',name:'',seg:SEGMENTS[0],stage:'Prospect',value:'',owner:OWNERS[0],date:today(),src:SOURCES[0],next:'',nextDate:'',notes:''};
+  const l=id?db.leads.find(x=>x.id===id):{id:'',name:'',seg:SEGMENTS[0],stage:'Prospect',value:'',cost:'',phone:'',owner:OWNERS[0],date:today(),src:SOURCES[0],next:'',nextDate:'',notes:''};
   const opt=(arr,v)=>arr.map(o=>`<option ${o===v?'selected':''}>${o}</option>`).join('');
   const f=document.getElementById('leadForm');
   f.innerHTML=`<h3>${id?'Edit lead':'New lead'}</h3>
   <label>Name<input name="name" required value="${esc(l.name)}"></label>
   <div class="g2"><label>Segment<select name="seg">${opt(SEGMENTS,l.seg)}</select></label><label>Stage<select name="stage">${opt(STAGES.map(s=>s[0]),l.stage)}</select></label></div>
-  <div class="g2"><label>Value ($)<input name="value" type="number" step="1" value="${esc(l.value)}"></label><label>Owner<select name="owner">${opt(OWNERS,l.owner)}</select></label></div>
+  <div class="g2"><label>Revenue value ($)<input name="value" type="number" step="0.01" value="${esc(l.value)}"></label><label>Cost to us ($)<input name="cost" type="number" step="0.001" value="${esc(l.cost??'')}"></label></div>
+  <div class="g2"><label>Owner<select name="owner">${opt(OWNERS,l.owner)}</select></label><label>Phone or WhatsApp<input name="phone" value="${esc(l.phone??'')}"></label></div>
   <div class="g2"><label>Date entered<input name="date" type="date" value="${esc(l.date)}"></label><label>Source<select name="src">${opt(SOURCES,l.src)}</select></label></div>
   <div class="g2"><label>Next step<input name="next" value="${esc(l.next)}" placeholder="WhatsApp with photo, visit again, send proposal"></label><label>Next step date<input name="nextDate" type="date" value="${esc(l.nextDate)}"></label></div>
   <label>Notes<textarea name="notes" rows="3">${esc(l.notes)}</textarea></label>

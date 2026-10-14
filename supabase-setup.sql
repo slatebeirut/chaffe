@@ -3,7 +3,7 @@
 -- 1. Team members allowed in. Add each teammate's email.
 create table if not exists public.hq_members (
   email text primary key
-);
+);it 
 insert into public.hq_members (email) values
   ('marcbasbous307@gmail.com')
   -- ,('teammate2@email.com')
