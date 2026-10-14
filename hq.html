@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{--bg:#0c0a08;--bg2:#141009;--panel:#1b1611;--line:rgba(255,255,255,.09);--text:#f4eee6;--muted:#a79b8f;--accent:#9ad878;--accent2:#dba45a;--red:#e07a6a;--radius:16px}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -120,8 +121,9 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
 <div id="gate">
   <form id="gateForm">
     <h1>Chaffe HQ</h1>
-    <p>Team only. Enter the shared team password.</p>
-    <input type="password" id="pw" placeholder="Password" autocomplete="current-password" autofocus>
+    <p id="gateHint">Team only. Sign in with your team email.</p>
+    <input type="email" id="email" placeholder="Email" autocomplete="username" autofocus>
+    <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
     <div class="err" id="gateErr"></div>
     <button class="btn p" type="submit" style="justify-content:center">Enter</button>
   </form>
@@ -190,7 +192,10 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
 
 <script>
 /* ---------- CONFIG ---------- */
-const PASSWORD='chaffe2026'; // change this, then tell the team
+/* Supabase: paste the two values from Project Settings > API. Leave empty to run on this device only. */
+const SUPABASE_URL='';
+const SUPABASE_ANON_KEY='';
+const PASSWORD='chaffe2026'; // used only when Supabase is not configured
 const STAGES=[
   ['Prospect','Named, reachable, on the list'],
   ['Contacted','Visit, call, message or page visit'],
@@ -255,20 +260,63 @@ const KPI_FIELDS=[['contacted','Contacted this week'],['leads','Leads this week'
 /* ---------- STORAGE ---------- */
 const K='chaffe_hq_v1';
 let db;
-function load(){try{db=JSON.parse(localStorage.getItem(K))}catch(e){}
-  if(!db){db={leads:SEED_LEADS.map((l,i)=>({id:'l'+i,...l})),contacts:SEED_CONTACTS.map((c,i)=>({id:'c'+i,...c})),canvas:Object.fromEntries(CANVAS_BLOCKS.map(b=>[b[0],b[3]])),snap:Object.fromEntries(SNAP_FIELDS.map(f=>[f[0],f[2]])),kpis:{}}}
+const seed=()=>({leads:SEED_LEADS.map((l,i)=>({id:'l'+i,...l})),contacts:SEED_CONTACTS.map((c,i)=>({id:'c'+i,...c})),canvas:Object.fromEntries(CANVAS_BLOCKS.map(b=>[b[0],b[3]])),snap:Object.fromEntries(SNAP_FIELDS.map(f=>[f[0],f[2]])),kpis:{}});
+const CLOUD=!!(SUPABASE_URL&&SUPABASE_ANON_KEY);
+let sb=null,saving=false;
+async function load(){
+  if(CLOUD){
+    const {data,error}=await sb.from('hq_state').select('key,value');
+    if(error){toast('Load failed: '+error.message);db=seed();return}
+    db=seed();(data||[]).forEach(r=>{db[r.key]=r.value});
+    if(!data||!data.length)await pushAll();
+    return;
+  }
+  try{db=JSON.parse(localStorage.getItem(K))}catch(e){}
+  if(!db)db=seed();
 }
-function save(){localStorage.setItem(K,JSON.stringify(db));toast('Saved')}
+async function pushAll(){for(const k of Object.keys(db))await sb.from('hq_state').upsert({key:k,value:db[k],updated_at:new Date().toISOString()})}
+async function save(keys){
+  if(!CLOUD){localStorage.setItem(K,JSON.stringify(db));toast('Saved');return}
+  saving=true;
+  const ks=keys||Object.keys(db);
+  const rows=ks.map(k=>({key:k,value:db[k],updated_at:new Date().toISOString()}));
+  const {error}=await sb.from('hq_state').upsert(rows);
+  saving=false;
+  toast(error?'Save failed: '+error.message:'Saved to team');
+}
+function subscribe(){
+  sb.channel('hq').on('postgres_changes',{event:'*',schema:'public',table:'hq_state'},p=>{
+    if(saving||!p.new)return;
+    db[p.new.key]=p.new.value;
+    if(document.activeElement&&document.activeElement.tagName==='TEXTAREA'&&['canvas','snap'].includes(p.new.key))return;
+    renderAll();toast('Updated by a teammate');
+  }).subscribe();
+}
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('on');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),1200)}
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9);
 const today=()=>new Date().toISOString().slice(0,10);
 
 /* ---------- GATE ---------- */
-async function unlock(pw){if(pw===PASSWORD){sessionStorage.setItem('chaffe_hq_ok','1');document.getElementById('gate').style.display='none';return true}return false}
-document.getElementById('gateForm').addEventListener('submit',async e=>{e.preventDefault();if(!await unlock(document.getElementById('pw').value))document.getElementById('gateErr').textContent='Wrong password.'});
-if(sessionStorage.getItem('chaffe_hq_ok'))document.getElementById('gate').style.display='none';
-document.getElementById('lockBtn').onclick=()=>{sessionStorage.removeItem('chaffe_hq_ok');location.reload()};
+const gateEl=document.getElementById('gate'),gateErr=document.getElementById('gateErr');
+async function start(){await load();renderAll();if(CLOUD)subscribe();gateEl.style.display='none'}
+if(CLOUD){
+  sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  document.getElementById('gateForm').addEventListener('submit',async e=>{
+    e.preventDefault();gateErr.textContent='';
+    const {error}=await sb.auth.signInWithPassword({email:document.getElementById('email').value.trim(),password:document.getElementById('pw').value});
+    if(error){gateErr.textContent=error.message;return}
+    start();
+  });
+  sb.auth.getSession().then(({data})=>{if(data.session)start()});
+  document.getElementById('lockBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
+}else{
+  document.getElementById('email').style.display='none';
+  document.getElementById('gateHint').textContent='Team only. Enter the shared team password.';
+  document.getElementById('gateForm').addEventListener('submit',e=>{e.preventDefault();if(document.getElementById('pw').value===PASSWORD){sessionStorage.setItem('chaffe_hq_ok','1');start()}else gateErr.textContent='Wrong password.'});
+  if(sessionStorage.getItem('chaffe_hq_ok'))start();
+  document.getElementById('lockBtn').onclick=()=>{sessionStorage.removeItem('chaffe_hq_ok');location.reload()};
+}
 
 /* ---------- TABS ---------- */
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v))});
@@ -307,9 +355,9 @@ function openLead(id){
   <div class="g2"><label>Next step<input name="next" value="${esc(l.next)}" placeholder="WhatsApp with photo, visit again, send proposal"></label><label>Next step date<input name="nextDate" type="date" value="${esc(l.nextDate)}"></label></div>
   <label>Notes<textarea name="notes" rows="3">${esc(l.notes)}</textarea></label>
   <div class="mrow"><div>${id?'<button type="button" class="btn danger" id="delLead">Delete</button>':''}</div><div style="display:flex;gap:8px"><button type="button" class="btn" id="cancelLead">Cancel</button><button class="btn p" type="submit">Save</button></div></div>`;
-  f.onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));if(id)Object.assign(l,d);else db.leads.push({id:uid(),...d});save();renderFunnel();closeModal()};
+  f.onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));if(id)Object.assign(l,d);else db.leads.push({id:uid(),...d});save(['leads']);renderFunnel();closeModal()};
   f.querySelector('#cancelLead').onclick=closeModal;
-  const del=f.querySelector('#delLead');if(del)del.onclick=()=>{if(confirm('Delete this lead?')){db.leads=db.leads.filter(x=>x.id!==id);save();renderFunnel();closeModal()}};
+  const del=f.querySelector('#delLead');if(del)del.onclick=()=>{if(confirm('Delete this lead?')){db.leads=db.leads.filter(x=>x.id!==id);save(['leads']);renderFunnel();closeModal()}};
   document.getElementById('modal').classList.add('on');
 }
 function closeModal(){document.getElementById('modal').classList.remove('on')}
@@ -331,9 +379,9 @@ function openContact(id){
   <label>What they gave us<textarea name="gave" rows="2">${esc(c.gave)}</textarea></label>
   <label>Next step<input name="next" value="${esc(c.next)}"></label>
   <div class="mrow"><div>${id?'<button type="button" class="btn danger" id="delC">Delete</button>':''}</div><div style="display:flex;gap:8px"><button type="button" class="btn" id="cancelC">Cancel</button><button class="btn p" type="submit">Save</button></div></div>`;
-  f.onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));if(id)Object.assign(c,d);else db.contacts.push({id:uid(),...d});save();renderContacts();closeModal()};
+  f.onsubmit=e=>{e.preventDefault();const d=Object.fromEntries(new FormData(f));if(id)Object.assign(c,d);else db.contacts.push({id:uid(),...d});save(['contacts']);renderContacts();closeModal()};
   f.querySelector('#cancelC').onclick=closeModal;
-  const del=f.querySelector('#delC');if(del)del.onclick=()=>{if(confirm('Delete this contact?')){db.contacts=db.contacts.filter(x=>x.id!==id);save();renderContacts();closeModal()}};
+  const del=f.querySelector('#delC');if(del)del.onclick=()=>{if(confirm('Delete this contact?')){db.contacts=db.contacts.filter(x=>x.id!==id);save(['contacts']);renderContacts();closeModal()}};
   document.getElementById('modal').classList.add('on');
 }
 document.getElementById('addContact').onclick=()=>openContact('');
@@ -342,7 +390,7 @@ document.getElementById('addContact').onclick=()=>openContact('');
 function renderCanvas(){
   const c=document.getElementById('canvas');
   c.innerHTML=CANVAS_BLOCKS.map(([k,t,h,_,cls])=>`<div class="block ${cls} ${/[A-G]/.test(k)?'adv':''}"><h4><i>${k}</i>${t}</h4><small>${h}</small><textarea data-k="${k}">${esc(db.canvas[k]||'')}</textarea></div>`).join('');
-  c.querySelectorAll('textarea').forEach(t=>t.oninput=()=>{db.canvas[t.dataset.k]=t.value;deb(save,'canvasSaved')});
+  c.querySelectorAll('textarea').forEach(t=>t.oninput=()=>{db.canvas[t.dataset.k]=t.value;deb(()=>save(['canvas']),'canvasSaved')});
 }
 /* ---------- SNAPSHOT ---------- */
 function renderSnap(){
@@ -350,8 +398,8 @@ function renderSnap(){
   s.innerHTML=SNAP_FIELDS.map(([k,t])=>`<div class="sbox ${k==='evidence'?'wide':''}"><h4>${t}</h4><textarea data-k="${k}">${esc(db.snap[k]||'')}</textarea></div>`).join('')
    +`<div class="sbox wide"><h4>KPIs this week</h4><div class="in2">${KPI_FIELDS.map(([k,t])=>`<label>${t}<input type="number" data-kpi="${k}" value="${esc(db.kpis[k]??'')}"></label>`).join('')}</div></div>`
    +`<div class="sbox wide"><h4>Leak check (from Session 4)</h4><div class="leak" id="leak"></div></div>`;
-  s.querySelectorAll('textarea').forEach(t=>t.oninput=()=>{db.snap[t.dataset.k]=t.value;deb(save,'snapSaved')});
-  s.querySelectorAll('[data-kpi]').forEach(i=>i.oninput=()=>{db.kpis[i.dataset.kpi]=i.value;deb(save,'snapSaved')});
+  s.querySelectorAll('textarea').forEach(t=>t.oninput=()=>{db.snap[t.dataset.k]=t.value;deb(()=>save(['snap']),'snapSaved')});
+  s.querySelectorAll('[data-kpi]').forEach(i=>i.oninput=()=>{db.kpis[i.dataset.kpi]=i.value;deb(()=>save(['kpis']),'snapSaved')});
   const n=s2=>db.leads.filter(l=>STAGES.findIndex(x=>x[0]===l.stage)>=STAGES.findIndex(x=>x[0]===s2)).length;
   const rows=[['Prospects to contacted','Few people reached: go in person, change the hour, ask for an introduction',n('Contacted'),n('Prospect')],['Contacted to leads','People listen, nobody engages: change the message, the ask, the approach',n('Lead'),n('Contacted')],['Leads to qualified','Interest from the wrong people: tighten the list',n('Qualified'),n('Lead')],['Qualified to trial','"Let me think": a trial bag, a free first pickup, a money back promise',n('Opportunity'),n('Qualified')],['Trial to customer','Trials that never convert: agree the success measure and end date at the start',n('Customer'),n('Opportunity')],['Customer to active','One order then silence: call on day 2 and day 7',n('Active'),n('Customer')]];
   document.getElementById('leak').innerHTML=rows.map(([a,b,x,y])=>`<div><b>${a}</b><span>${b}</span><em>${y?Math.round(x/y*100)+'%':'–'}</em></div>`).join('');
@@ -363,7 +411,6 @@ document.getElementById('exportBtn').onclick=()=>{const a=document.createElement
 document.getElementById('importFile').onchange=e=>{const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.leads||!d.contacts)throw 0;if(confirm('Replace everything on this device with the imported file?')){db=d;save();renderAll()}}catch(x){alert('Not a valid Chaffe HQ export.')}};r.readAsText(e.target.files[0]);e.target.value=''};
 
 function renderAll(){renderFunnel();renderContacts();renderCanvas();renderSnap()}
-load();renderAll();
 </script>
 </body>
 </html>
