@@ -124,8 +124,10 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
     <p id="gateHint">Team only. Sign in with your team email.</p>
     <input type="email" id="email" placeholder="Email" autocomplete="username" autofocus>
     <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
+    <input type="text" id="invite" placeholder="Team invite code" style="display:none" autocomplete="off">
     <div class="err" id="gateErr"></div>
-    <button class="btn p" type="submit" style="justify-content:center">Enter</button>
+    <button class="btn p" type="submit" style="justify-content:center" id="gateBtn">Enter</button>
+    <a href="#" id="gateToggle" style="font-size:13px;color:var(--muted);text-decoration:underline">First time here? Create your account</a>
   </form>
 </div>
 
@@ -196,6 +198,7 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
 const SUPABASE_URL='https://rhwmkjohhfzznxrchtwf.supabase.co';
 const SUPABASE_ANON_KEY='sb_publishable_FRr7wn0PRWhKM0rfdFD5ug_9pVi1_HM';
 const PASSWORD='chaffe2026'; // used only when Supabase is not configured
+const INVITE_CODE='CHAFFE-TEAM'; // teammates type this once to create their account
 const STAGES=[
   ['Prospect','Named, reachable, on the list'],
   ['Contacted','Visit, call, message or page visit'],
@@ -311,16 +314,29 @@ const gateEl=document.getElementById('gate'),gateErr=document.getElementById('ga
 async function start(){await load();renderAll();if(CLOUD)subscribe();gateEl.style.display='none'}
 if(CLOUD){
   sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+  let signup=false;
+  const tog=document.getElementById('gateToggle');
+  tog.onclick=e=>{e.preventDefault();signup=!signup;document.getElementById('invite').style.display=signup?'':'none';document.getElementById('gateBtn').textContent=signup?'Create account':'Enter';tog.textContent=signup?'Already have an account? Sign in':'First time here? Create your account';document.getElementById('gateHint').textContent=signup?'Pick a password and enter the team invite code.':'Team only. Sign in with your team email.';gateErr.textContent=''};
   document.getElementById('gateForm').addEventListener('submit',async e=>{
     e.preventDefault();gateErr.textContent='';
-    const {error}=await sb.auth.signInWithPassword({email:document.getElementById('email').value.trim(),password:document.getElementById('pw').value});
+    const email=document.getElementById('email').value.trim(),password=document.getElementById('pw').value;
+    if(signup){
+      const code=document.getElementById('invite').value.trim();
+      if(code!==INVITE_CODE){gateErr.textContent='Wrong invite code.';return}
+      if(password.length<6){gateErr.textContent='Password needs at least 6 characters.';return}
+      const {data,error}=await sb.auth.signUp({email,password,options:{data:{invite:code}}});
+      if(error){gateErr.textContent=error.message;return}
+      if(!data.session){gateErr.textContent='Account created. Check your email to confirm, then sign in.';return}
+      start();return;
+    }
+    const {error}=await sb.auth.signInWithPassword({email,password});
     if(error){gateErr.textContent=error.message;return}
     start();
   });
   sb.auth.getSession().then(({data})=>{if(data.session)start()});
   document.getElementById('lockBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 }else{
-  document.getElementById('email').style.display='none';
+  document.getElementById('email').style.display='none';document.getElementById('gateToggle').style.display='none';
   document.getElementById('gateHint').textContent='Team only. Enter the shared team password.';
   document.getElementById('gateForm').addEventListener('submit',e=>{e.preventDefault();if(document.getElementById('pw').value===PASSWORD){sessionStorage.setItem('chaffe_hq_ok','1');start()}else gateErr.textContent='Wrong password.'});
   if(sessionStorage.getItem('chaffe_hq_ok'))start();
