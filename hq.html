@@ -209,15 +209,15 @@ const STAGES=[
   ['Referrer','Sent us another customer']
 ];
 const SEGMENTS=['Home gardener','Small farmer','Nursery','Landscaper','Roastery (supplier)','Service supplier','Partner'];
-const OWNERS=['Tamara','Wafik','Marc','Rayan','Nour'];
+const OWNERS=['Tamara','Wafik','Rayan','Nour'];
 const SOURCES=['Direct outreach','WhatsApp','Instagram','Roastery referral','Website','Event','QR code'];
 
 /* ---------- SEED DATA (from the unit economics sheet and the canvas) ---------- */
 const SEED_LEADS=[
   {name:'Amer Darkhbany roastery',seg:'Roastery (supplier)',stage:'Opportunity',value:0,cost:2,owner:'Tamara',date:'2026-10-02',src:'Direct outreach',phone:'76 718607',next:'Agree a fixed weekly pickup day and do the first 10 kg pickup',nextDate:'2026-10-17',notes:'Raw chaff: $1.00 per 0.5 kg = $2.00/kg. Model allows 5% sorting loss. Supply beachhead.'},
   {name:'Pik&Drop',seg:'Service supplier',stage:'Qualified',value:0,cost:4,owner:'Wafik',date:'2026-10-02',src:'WhatsApp',phone:'App',next:'Book the first Greater Beirut pickup at $4',nextDate:'2026-10-17',notes:'Per trip: $3.50 Beirut, $4.00 Greater Beirut, $4.50 outside Beirut. Base case $4, allocated across usable output.'},
-  {name:'Ubuy Lebanon (kraft pouches)',seg:'Service supplier',stage:'Lead',value:0,cost:0.19,owner:'Marc',date:'2026-10-02',src:'Website',phone:'Online',next:'Order the first 100 resealable pouches',nextDate:'2026-10-18',notes:'$0.19 per heat sealable stand-up pouch. Benchmark price, one pouch per finished bag.'},
-  {name:'The Sticky Lab (labels)',seg:'Service supplier',stage:'Lead',value:0,cost:0.065,owner:'Marc',date:'2026-10-02',src:'Website',phone:'Online',next:'Finalize label design, order 100 labels ($6.50)',nextDate:'2026-10-18',notes:'100 = $6.50, 500 = $33, 1,000 = $65. Model uses $0.065 per bag at the 1,000 tier.'},
+  {name:'Ubuy Lebanon (kraft pouches)',seg:'Service supplier',stage:'Lead',value:0,cost:0.19,owner:'Wafik',date:'2026-10-02',src:'Website',phone:'Online',next:'Order the first 100 resealable pouches',nextDate:'2026-10-18',notes:'$0.19 per heat sealable stand-up pouch. Benchmark price, one pouch per finished bag.'},
+  {name:'The Sticky Lab (labels)',seg:'Service supplier',stage:'Lead',value:0,cost:0.065,owner:'Tamara',date:'2026-10-02',src:'Website',phone:'Online',next:'Finalize label design, order 100 labels ($6.50)',nextDate:'2026-10-18',notes:'100 = $6.50, 500 = $33, 1,000 = $65. Model uses $0.065 per bag at the 1,000 tier.'},
   {name:'RAF Lebanon (10 kg scale)',seg:'Service supplier',stage:'Qualified',value:0,cost:3,owner:'Rayan',date:'2026-10-02',src:'Website',phone:'Online',next:'Buy the scale',nextDate:'2026-10-18',notes:'$3.00 one time. Weighing collected chaff and portioning bags.'},
   {name:'ASSAF Online (impulse sealer)',seg:'Service supplier',stage:'Qualified',value:0,cost:12,owner:'Rayan',date:'2026-10-02',src:'Website',phone:'Online',next:'Buy the PFS impulse sealer',nextDate:'2026-10-18',notes:'From $12.00 one time. Heat seals the final bags in house.'},
   {name:'IM Trading (Zilan dehydrator)',seg:'Service supplier',stage:'Contacted',value:0,cost:59,owner:'Nour',date:'2026-10-02',src:'Website',phone:'Online',next:'Moisture test a sample first, buy only if drying is needed',nextDate:'2026-10-20',notes:'Zilan 5 tray dehydrator $59.00. Excluded from the base case.'},
@@ -227,7 +227,7 @@ const SEED_LEADS=[
   {name:'Home gardener 2 (name them)',seg:'Home gardener',stage:'Prospect',value:6,cost:0,owner:'Rayan',date:'',src:'Instagram',phone:'',next:'Reply to Instagram interest, offer a free trial bag',nextDate:'2026-10-18',notes:'Replace with a real name.'},
   {name:'Small farmer 1 (name them)',seg:'Small farmer',stage:'Prospect',value:30,cost:0,owner:'Wafik',date:'',src:'WhatsApp',phone:'',next:'Ask for the owner, 30 seconds on fertilizer cost, leave a sample and a date',nextDate:'2026-10-18',notes:'Replace with a real name.'},
   {name:'Small farmer 2 (name them)',seg:'Small farmer',stage:'Prospect',value:30,cost:0,owner:'Nour',date:'',src:'Roastery referral',phone:'',next:'Ask Amer for one farmer he knows, then visit with a sample',nextDate:'2026-10-20',notes:'Replace with a real name.'},
-  {name:'Nursery 1 (name them)',seg:'Nursery',stage:'Prospect',value:100,cost:0,owner:'Marc',date:'',src:'Direct outreach',phone:'',next:'Bring samples and a price list with the $5 bulk rate',nextDate:'2026-10-22',notes:'Phase 2 target. Replace with a real name.'}
+  {name:'Nursery 1 (name them)',seg:'Nursery',stage:'Prospect',value:100,cost:0,owner:'Rayan',date:'',src:'Direct outreach',phone:'',next:'Bring samples and a price list with the $5 bulk rate',nextDate:'2026-10-22',notes:'Phase 2 target. Replace with a real name.'}
 ];
 const SEED_CONTACTS=[
   {who:'Amer Darkhbany',role:'Roastery, raw chaff supplier',contact:'76 718607',gave:'$1.00 per 0.5 kg ($2.00/kg). Model allows 5% sorting loss.',status:'Quoted',next:'First pickup, fixed weekly day'},
@@ -269,7 +269,7 @@ const SNAP_FIELDS=[
 const KPI_FIELDS=[['contacted','Contacted this week'],['leads','Leads this week'],['trials','Trial bags out'],['customers','Paying customers'],['kg','Kg collected'],['cac','Cost per customer ($)']];
 
 /* ---------- STORAGE ---------- */
-const K='chaffe_hq_v2';
+const K='chaffe_hq_v3';
 let db;
 const seed=()=>({leads:SEED_LEADS.map((l,i)=>({id:'l'+i,...l})),contacts:SEED_CONTACTS.map((c,i)=>({id:'c'+i,...c})),canvas:Object.fromEntries(CANVAS_BLOCKS.map(b=>[b[0],b[3]])),snap:Object.fromEntries(SNAP_FIELDS.map(f=>[f[0],f[2]])),kpis:{}});
 const CLOUD=!!(SUPABASE_URL&&SUPABASE_ANON_KEY);
@@ -435,7 +435,8 @@ let debT;function deb(fn,tagId){const tag=document.getElementById(tagId);tag.tex
 document.getElementById('exportBtn').onclick=()=>{const a=document.createElement('a');a.href='data:application/json,'+encodeURIComponent(JSON.stringify(db,null,2));a.download='chaffe-hq-'+today()+'.json';a.click()};
 document.getElementById('importFile').onchange=e=>{const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!d.leads||!d.contacts)throw 0;if(confirm('Replace everything on this device with the imported file?')){db=d;save();renderAll()}}catch(x){alert('Not a valid Chaffe HQ export.')}};r.readAsText(e.target.files[0]);e.target.value=''};
 
-function renderAll(){renderFunnel();renderContacts();renderCanvas();renderSnap()}
+function migrate(){const m={'Ubuy':'Wafik','Sticky':'Tamara','Nursery':'Rayan'};let ch=false;db.leads.forEach(l=>{if(l.owner==='Marc'){l.owner=Object.keys(m).find(k=>l.name.includes(k))?m[Object.keys(m).find(k=>l.name.includes(k))]:'Wafik';ch=true}});if(ch)save(['leads'])}
+function renderAll(){migrate();renderFunnel();renderContacts();renderCanvas();renderSnap()}
 </script>
 </body>
 </html>
