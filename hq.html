@@ -326,7 +326,7 @@ if(CLOUD){
       if(password.length<6){gateErr.textContent='Password needs at least 6 characters.';return}
       const u=await sb.auth.signUp({email,password,options:{data:{invite:code},emailRedirectTo:location.origin+location.pathname}});
       if(u.error){gateErr.textContent=u.error.message;return}
-      if(!u.data.session){gateErr.textContent='Account created but email confirmation is still on in Supabase. Turn it off, then press Continue again.';return}
+      if(!u.data.session){const again=await sb.auth.signInWithPassword({email,password});if(again.error){gateErr.textContent='Account created. Press Continue once more to sign in.';return}}
       start();
     }finally{btn.disabled=false;btn.textContent='Continue'}
   });
