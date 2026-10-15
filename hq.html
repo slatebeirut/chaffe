@@ -324,7 +324,7 @@ if(CLOUD){
       const code=document.getElementById('invite').value.trim();
       if(code!==INVITE_CODE){gateErr.textContent='Wrong invite code.';return}
       if(password.length<6){gateErr.textContent='Password needs at least 6 characters.';return}
-      const {data,error}=await sb.auth.signUp({email,password,options:{data:{invite:code}}});
+      const {data,error}=await sb.auth.signUp({email,password,options:{data:{invite:code},emailRedirectTo:location.origin+location.pathname}});
       if(error){gateErr.textContent=error.message;return}
       if(!data.session){gateErr.textContent='Account created. Check your email to confirm, then sign in.';return}
       start();return;
@@ -334,6 +334,7 @@ if(CLOUD){
     start();
   });
   sb.auth.getSession().then(({data})=>{if(data.session)start()});
+  sb.auth.onAuthStateChange((ev,sess)=>{if(ev==='SIGNED_IN'&&sess&&gateEl.style.display!=='none')start()});
   document.getElementById('lockBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 }else{
   document.getElementById('email').style.display='none';document.getElementById('gateToggle').style.display='none';
