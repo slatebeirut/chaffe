@@ -121,13 +121,12 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
 <div id="gate">
   <form id="gateForm">
     <h1>Chaffe HQ</h1>
-    <p id="gateHint">Team only. Sign in with your team email.</p>
+    <p id="gateHint">Sign in. New here? Add the invite code and your account is created.</p>
     <input type="email" id="email" placeholder="Email" autocomplete="username" autofocus>
     <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
-    <input type="text" id="invite" placeholder="Team invite code" style="display:none" autocomplete="off">
+    <input type="text" id="invite" placeholder="Invite code (new accounts only)" autocomplete="off">
     <div class="err" id="gateErr"></div>
-    <button class="btn p" type="submit" style="justify-content:center" id="gateBtn">Enter</button>
-    <a href="#" id="gateToggle" style="font-size:13px;color:var(--muted);text-decoration:underline">First time here? Create your account</a>
+    <button class="btn p" type="submit" style="justify-content:center" id="gateBtn">Continue</button>
   </form>
 </div>
 
@@ -153,7 +152,7 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
 <!-- FUNNEL -->
 <section class="view on" id="v-funnel">
   <div class="bar">
-    <div><h2>Sales funnel</h2><p>Lead to Won, with values, owners and the next step. Click a card to edit it. The funnel stays on until Demo Day.</p></div>
+    <div><h2>Sales funnel</h2><p>Lead to Won, with values, owners and the next step. Click a card to edit it.</p></div>
     <div style="display:flex;gap:8px"><button class="btn p" id="addLead">+ Add lead</button></div>
   </div>
   <div class="kpis" id="kpis"></div>
@@ -172,7 +171,7 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
 <!-- CANVAS -->
 <section class="view" id="v-canvas">
   <div class="bar">
-    <div><h2>Business Model Canvas</h2><p>Team 3, Fall 2026, Session 4. Blocks 1 to 9, then the advanced layer A to G. Edits save as you type.</p></div>
+    <div><h2>Business Model Canvas</h2><p>Blocks 1 to 9, then A to G. Edits save as you type.</p></div>
     <span class="tag" id="canvasSaved">Saved</span>
   </div>
   <div class="canvas" id="canvas"></div>
@@ -314,30 +313,28 @@ const gateEl=document.getElementById('gate'),gateErr=document.getElementById('ga
 async function start(){await load();renderAll();if(CLOUD)subscribe();gateEl.style.display='none'}
 if(CLOUD){
   sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-  let signup=false;
-  const tog=document.getElementById('gateToggle');
-  tog.onclick=e=>{e.preventDefault();signup=!signup;document.getElementById('invite').style.display=signup?'':'none';document.getElementById('gateBtn').textContent=signup?'Create account':'Enter';tog.textContent=signup?'Already have an account? Sign in':'First time here? Create your account';document.getElementById('gateHint').textContent=signup?'Pick a password and enter the team invite code.':'Team only. Sign in with your team email.';gateErr.textContent=''};
   document.getElementById('gateForm').addEventListener('submit',async e=>{
     e.preventDefault();gateErr.textContent='';
-    const email=document.getElementById('email').value.trim(),password=document.getElementById('pw').value;
-    if(signup){
-      const code=document.getElementById('invite').value.trim();
+    const email=document.getElementById('email').value.trim(),password=document.getElementById('pw').value,code=document.getElementById('invite').value.trim();
+    if(!email||!password){gateErr.textContent='Enter your email and a password.';return}
+    const btn=document.getElementById('gateBtn');btn.disabled=true;btn.textContent='One moment';
+    try{
+      const r=await sb.auth.signInWithPassword({email,password});
+      if(!r.error){start();return}
+      if(!code){gateErr.textContent='No account with that email and password. New here? Add the invite code.';return}
       if(code!==INVITE_CODE){gateErr.textContent='Wrong invite code.';return}
       if(password.length<6){gateErr.textContent='Password needs at least 6 characters.';return}
-      const {data,error}=await sb.auth.signUp({email,password,options:{data:{invite:code},emailRedirectTo:location.origin+location.pathname}});
-      if(error){gateErr.textContent=error.message;return}
-      if(!data.session){gateErr.textContent='Account created. Check your email to confirm, then sign in.';return}
-      start();return;
-    }
-    const {error}=await sb.auth.signInWithPassword({email,password});
-    if(error){gateErr.textContent=error.message;return}
-    start();
+      const u=await sb.auth.signUp({email,password,options:{data:{invite:code},emailRedirectTo:location.origin+location.pathname}});
+      if(u.error){gateErr.textContent=u.error.message;return}
+      if(!u.data.session){gateErr.textContent='Account created but email confirmation is still on in Supabase. Turn it off, then press Continue again.';return}
+      start();
+    }finally{btn.disabled=false;btn.textContent='Continue'}
   });
   sb.auth.getSession().then(({data})=>{if(data.session)start()});
   sb.auth.onAuthStateChange((ev,sess)=>{if(ev==='SIGNED_IN'&&sess&&gateEl.style.display!=='none')start()});
   document.getElementById('lockBtn').onclick=async()=>{await sb.auth.signOut();location.reload()};
 }else{
-  document.getElementById('email').style.display='none';document.getElementById('gateToggle').style.display='none';
+  document.getElementById('email').style.display='none';document.getElementById('invite').style.display='none';
   document.getElementById('gateHint').textContent='Team only. Enter the shared team password.';
   document.getElementById('gateForm').addEventListener('submit',e=>{e.preventDefault();if(document.getElementById('pw').value===PASSWORD){sessionStorage.setItem('chaffe_hq_ok','1');start()}else gateErr.textContent='Wrong password.'});
   if(sessionStorage.getItem('chaffe_hq_ok'))start();
@@ -425,7 +422,7 @@ function renderSnap(){
   const s=document.getElementById('snap');
   s.innerHTML=SNAP_FIELDS.map(([k,t])=>`<div class="sbox ${k==='evidence'?'wide':''}"><h4>${t}</h4><textarea data-k="${k}">${esc(db.snap[k]||'')}</textarea></div>`).join('')
    +`<div class="sbox wide"><h4>KPIs this week</h4><div class="in2">${KPI_FIELDS.map(([k,t])=>`<label>${t}<input type="number" data-kpi="${k}" value="${esc(db.kpis[k]??'')}"></label>`).join('')}</div></div>`
-   +`<div class="sbox wide"><h4>Leak check (from Session 4)</h4><div class="leak" id="leak"></div></div>`;
+   +`<div class="sbox wide"><h4>Where the funnel leaks</h4><div class="leak" id="leak"></div></div>`;
   s.querySelectorAll('textarea').forEach(t=>t.oninput=()=>{db.snap[t.dataset.k]=t.value;deb(()=>save(['snap']),'snapSaved')});
   s.querySelectorAll('[data-kpi]').forEach(i=>i.oninput=()=>{db.kpis[i.dataset.kpi]=i.value;deb(()=>save(['kpis']),'snapSaved')});
   const n=s2=>db.leads.filter(l=>STAGES.findIndex(x=>x[0]===l.stage)>=STAGES.findIndex(x=>x[0]===s2)).length;
