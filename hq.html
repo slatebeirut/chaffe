@@ -112,6 +112,36 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fin .x{background:none;border:0;color:var(--muted);font-size:16px}
 @media(max-width:900px){.fin{grid-template-columns:1fr}}
 
+/* simulation */
+.simgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.inp{display:grid;gap:8px}
+.inp label{display:grid;grid-template-columns:1fr 96px;gap:8px;align-items:center;text-transform:none;letter-spacing:0;font-size:12px;font-weight:500;color:var(--text)}
+.inp label small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.inp input,.inp select{padding:7px 9px;font-size:13px;text-align:right}
+.inp select{text-align:left}
+.st{display:inline-block;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.st.a{background:rgba(154,216,120,.15);color:var(--accent)}
+.st.q{background:rgba(219,164,90,.15);color:var(--accent2)}
+.st.e{background:rgba(255,255,255,.08);color:var(--muted)}
+.ref{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}
+.warn{display:none;background:rgba(224,122,106,.12);border:1px solid rgba(224,122,106,.4);color:#f0a79a;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px}
+.warn.on{display:block}
+.scen{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{background:none;border:0;color:var(--muted);padding:7px 14px;font-size:13px}
+.seg button.on{background:var(--accent);color:#0c0a08;font-weight:600}
+.months{display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
+.months label{display:grid;gap:4px;text-align:center;font-size:10px;letter-spacing:.06em}
+.months input{padding:6px 4px;text-align:center;font-size:13px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.charts svg{width:100%;height:auto;display:block}
+#simTable td,#simTable th,#simRefTable td,#simRefTable th{text-align:right;white-space:nowrap;padding:9px 10px}
+#simTable td:first-child,#simTable th:first-child,#simRefTable td:first-child,#simRefTable th:first-child{text-align:left}
+#simTable tr.hl td{font-weight:600;background:rgba(255,255,255,.03)}
+.neg{color:#f0a79a}
+@media(max-width:1100px){.simgrid{grid-template-columns:1fr 1fr}.months{grid-template-columns:repeat(6,1fr)}}
+@media(max-width:900px){.simgrid,.charts{grid-template-columns:1fr}.months{grid-template-columns:repeat(4,1fr)}}
+
 /* modal */
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;place-items:center;z-index:50;padding:16px}
 #modal.on{display:grid}
@@ -207,6 +237,46 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
     <div class="tbl"><table id="opex"><thead><tr><th>OPEX, per month</th><th style="width:140px;text-align:right">Estimated cost</th><th style="width:40px"></th></tr></thead><tbody></tbody><tfoot><tr><td><b>Total OPEX</b></td><td class="tot"></td><td></td></tr></tfoot></table></div>
   </div>
   <div class="sbox" style="margin-top:14px"><h4>Revenue note</h4><textarea id="finNote" style="min-height:70px"></textarea></div>
+
+  <div class="bar" style="margin-top:44px">
+    <div><h2>Profit and loss, payback</h2><p>12 month simulation in USD. Linked to the inputs below. Illustrative results exclude costs not yet entered. They are not confirmed net profits.</p></div>
+    <span class="tag" id="simSaved">Saved</span>
+  </div>
+  <div id="simWarn" class="warn"></div>
+  <div class="simgrid">
+    <div class="sbox">
+      <h4>Unit inputs</h4>
+      <div class="inp" id="simUnit"></div>
+    </div>
+    <div class="sbox">
+      <h4>Monthly operating inputs</h4>
+      <div class="inp" id="simOpex"></div>
+    </div>
+    <div class="sbox">
+      <h4>Marketing</h4>
+      <div class="inp" id="simMkt"></div>
+    </div>
+    <div class="sbox">
+      <h4>Startup cash, month 0</h4>
+      <div class="inp" id="simCapex"></div>
+      <p class="ref" id="simRef"></p>
+    </div>
+  </div>
+  <div class="sbox" style="margin-top:14px">
+    <div class="scen">
+      <h4 style="margin:0">Sales scenario</h4>
+      <div class="seg" id="simScen"></div>
+      <span class="muted" style="font-size:12px">Illustrative sensitivity, not a demand forecast. Production equals sales, paid immediately, no inventory.</span>
+    </div>
+    <div class="months" id="simMonths"></div>
+  </div>
+  <div class="kpis" id="simKpis" style="margin-top:14px"></div>
+  <div class="charts">
+    <div class="sbox"><h4>Revenue versus cost, per month</h4><div id="chart1"></div></div>
+    <div class="sbox"><h4>Cumulative cash flow</h4><div id="chart2"></div></div>
+  </div>
+  <div class="tbl" style="margin-top:14px"><table id="simTable"></table></div>
+  <div class="sbox" style="margin-top:14px"><h4>Reference check, months 1 to 3, starting inputs only</h4><div class="tbl"><table id="simRefTable"></table></div></div>
 </section>
 
 </main>
@@ -292,7 +362,15 @@ const SNAP_FIELDS=[
 const SEED_FINANCE={
   capex:[{n:'Basic tools and measuring equipment',v:45},{n:'Initial testing supplies',v:35},{n:'Packaging setup',v:30}],
   opex:[{n:'Coffee chaff sourcing',v:0},{n:'Transportation',v:40},{n:'Packaging and labels',v:35},{n:'Testing and miscellaneous',v:45}],
+  sim:null,
   note:'Potential revenue channels include retail soil amendment packs, bulk sales to nurseries, and direct sales to gardeners. Revenue should remain projected until plant testing supports the product claims.'
+};
+const SEED_SIM={
+  price:6,chaff:0,pouch:0.19,label:0.065,laborBag:0,
+  transMode:'month',transMonth:40,trips:10,tripRate:4,testing:45,otherOpex:0,
+  mkt:600,mktFrom:1,mktTo:3,mktAfter:0,mktTiming:'monthly',
+  equip:15,otherStartup:0,workingCap:0,
+  scen:'Base',qty:{Low:Array(12).fill(50),Base:Array(12).fill(150),High:Array(12).fill(300)}
 };
 const KPI_FIELDS=[['contacted','Contacted this week'],['leads','Leads this week'],['trials','Trial bags out'],['customers','Paying customers'],['kg','Kg collected'],['cac','Cost per customer ($)']];
 
@@ -472,13 +550,117 @@ function renderFinance(){
     tb.innerHTML=f[k].map((r,i)=>`<tr><td><input data-k="${k}" data-i="${i}" data-f="n" value="${esc(r.n)}"></td><td><input class="n" type="number" step="1" data-k="${k}" data-i="${i}" data-f="v" value="${esc(r.v)}"></td><td><button class="x" data-del="${k}:${i}" title="Remove">×</button></td></tr>`).join('');
     t.querySelector('.tot').textContent=fmt(f[k].reduce((a,r)=>a+(+r.v||0),0))+suf;
     tb.querySelectorAll('input').forEach(i=>i.oninput=()=>{f[i.dataset.k][+i.dataset.i][i.dataset.f]=i.dataset.f==='v'?+i.value:i.value;t.querySelector('.tot').textContent=fmt(f[i.dataset.k].reduce((a,r)=>a+(+r.v||0),0))+suf;deb(()=>save(['finance']),'snapSaved')});
-    tb.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const [kk,ii]=b.dataset.del.split(':');f[kk].splice(+ii,1);save(['finance']);renderFinance()});
+    tb.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const [kk,ii]=b.dataset.del.split(':');f[kk].splice(+ii,1);save(['finance']);renderFinance();renderSim()});
   });
   const note=document.getElementById('finNote');note.value=f.note||'';note.oninput=()=>{f.note=note.value;deb(()=>save(['finance']),'snapSaved')};
 }
 document.getElementById('addCapex').onclick=()=>{db.finance.capex.push({n:'New line',v:0});save(['finance']);renderFinance()};
 document.getElementById('addOpex').onclick=()=>{db.finance.opex.push({n:'New line',v:0});save(['finance']);renderFinance()};
-function renderAll(){migrate();renderFunnel();renderContacts();renderCanvas();renderSnap();renderFinance()}
+/* ---------- P&L AND PAYBACK SIMULATION ---------- */
+const $=id=>document.getElementById(id);
+const money=v=>(v<0?'−$':'$')+Math.abs(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+function simModel(S){
+  const q=S.qty[S.scen];const rows=[];let cum=-(+S.equip||0)-(+S.otherStartup||0)-(+S.workingCap||0);
+  const m0={m:0,cash:cum,cum};
+  const trans=S.transMode==='trips'?(+S.trips||0)*(+S.tripRate||0):(+S.transMonth||0);
+  const pkgUnit=(+S.pouch||0)+(+S.label||0);
+  for(let m=1;m<=12;m++){
+    const bags=+q[m-1]||0;
+    const rev=bags*(+S.price||0);
+    const pkg=bags*pkgUnit, chaff=bags*(+S.chaff||0), labor=bags*(+S.laborBag||0);
+    const product=pkg+chaff+labor;
+    const gross=rev-product;
+    const inWin=m>=+S.mktFrom&&m<=+S.mktTo;
+    const mktPL=inWin?+S.mkt||0:+S.mktAfter||0;
+    const opex=trans+(+S.testing||0)+mktPL+(+S.otherOpex||0);
+    const op=gross-opex;
+    let mktCash=mktPL;
+    if(S.mktTiming==='upfront'){mktCash=inWin?0:(+S.mktAfter||0);}
+    const cash=rev-(product+trans+(+S.testing||0)+mktCash+(+S.otherOpex||0));
+    rows.push({m,bags,rev,pkg,chaff,labor,product,gross,trans,testing:+S.testing||0,mkt:mktPL,otherOpex:+S.otherOpex||0,opex,op,cash});
+  }
+  if(S.mktTiming==='upfront'){const total=(+S.mkt||0)*Math.max(0,(+S.mktTo)-(+S.mktFrom)+1);m0.cash-=total;m0.cum-=total;cum=m0.cum}
+  let payback=null;
+  rows.forEach(r=>{cum+=r.cash;r.cum=cum;if(payback===null&&cum>=0)payback=r.m});
+  return {m0,rows,payback,trans,pkgUnit};
+}
+function simInput(key,label,status,sub,opts){
+  const S=db.finance.sim,st={a:'Agreed',q:'Quotation',e:'Estimate',u:'Unvalidated',n:'Not costed'}[status]||'';
+  const cls={a:'a',q:'q',e:'e',u:'q',n:'e'}[status]||'e';
+  if(opts){return `<label><span>${label}<span class="st ${cls}">${st}</span>${sub?`<small>${sub}</small>`:''}</span><select data-sim="${key}">${opts.map(o=>`<option value="${o[0]}" ${S[key]==o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></label>`}
+  return `<label><span>${label}<span class="st ${cls}">${st}</span>${sub?`<small>${sub}</small>`:''}</span><input type="number" step="any" data-sim="${key}" value="${esc(S[key])}"></label>`;
+}
+function renderSim(){
+  if(!db.finance.sim)db.finance.sim=JSON.parse(JSON.stringify(SEED_SIM));
+  const S=db.finance.sim;
+  $('simUnit').innerHTML=[
+    simInput('price','Selling price per 1 kg bag ($)','u'),
+    simInput('chaff','Coffee chaff ($/kg)','a','Free supply from Amer Darkhbany'),
+    simInput('pouch','Pouch ($/bag)','q','Ubuy benchmark'),
+    simInput('label','Label ($/bag)','q','The Sticky Lab, 1,000 tier'),
+    simInput('laborBag','Labor and processing ($/bag)','n','Enter when measured')
+  ].join('');
+  $('simOpex').innerHTML=[
+    simInput('transMode','Transportation basis','e','',[['month','Monthly estimate'],['trips','Trips × rate']]),
+    S.transMode==='trips'?simInput('trips','Trips per month','e')+simInput('tripRate','Rate per trip ($)','q','$3.50 to $4.50 Pik&Drop'):simInput('transMonth','Transportation ($/month)','e'),
+    simInput('testing','Testing and miscellaneous ($/month)','e'),
+    simInput('otherOpex','Other operating costs ($/month)','n','Not yet costed')
+  ].join('');
+  $('simMkt').innerHTML=[
+    simInput('mkt','Turbo Vision ($/month)','a','Accepted three month commitment'),
+    simInput('mktFrom','From month','a'),
+    simInput('mktTo','To month','a'),
+    simInput('mktAfter','Marketing after that ($/month)','e','Assumes no renewal'),
+    simInput('mktTiming','Payment timing','e','',[['monthly','Paid monthly in those months'],['upfront','Paid in full at month 0']])
+  ].join('');
+  $('simCapex').innerHTML=[
+    simInput('equip','Equipment CAPEX ($)','q','Scale $3 + sealer from $12'),
+    simInput('otherStartup','Other startup expenses ($)','n','Kept separate from equipment'),
+    simInput('workingCap','Initial working capital ($)','e')
+  ].join('');
+  const capexTot=db.finance.capex.reduce((a,r)=>a+(+r.v||0),0);
+  $('simRef').innerHTML=`For reference, the CAPEX table above totals <b>${money(capexTot)}</b> (${db.finance.capex.map(r=>esc(r.n)).join(', ')}). It is not used here. Reconcile it with the equipment and other startup lines when the components are confirmed.`;
+  $('simScen').innerHTML=['Low','Base','High'].map(k=>`<button class="${S.scen===k?'on':''}" data-scen="${k}">${k}</button>`).join('');
+  $('simMonths').innerHTML=S.qty[S.scen].map((v,i)=>`<label>M${i+1}<input type="number" step="1" data-m="${i}" value="${esc(v)}"></label>`).join('');
+  const sv=()=>deb(()=>save(['finance']),'simSaved');
+  $('v-finance').querySelectorAll('[data-sim]').forEach(el=>el.oninput=()=>{S[el.dataset.sim]=el.type==='number'?+el.value:el.value;sv();if(el.dataset.sim==='transMode')renderSim();else renderSimOut()});
+  $('simScen').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.scen=b.dataset.scen;sv();renderSim()});
+  $('simMonths').querySelectorAll('input').forEach(i=>i.oninput=()=>{S.qty[S.scen][+i.dataset.m]=+i.value;sv();renderSimOut()});
+  renderSimOut();
+}
+function renderSimOut(){
+  const S=db.finance.sim,M=simModel(S);
+  const missing=[];if(!(+S.laborBag))missing.push('labor and processing per bag');if(!(+S.otherOpex))missing.push('other operating costs');if(!(+S.otherStartup))missing.push('other startup expenses');
+  const w=$('simWarn');w.classList.toggle('on',missing.length>0);w.textContent=missing.length?'Incomplete: not yet entered, '+missing.join(', ')+'. Illustrative results exclude costs not yet entered. They are not confirmed net profits.':'';
+  const rev=M.rows.reduce((a,r)=>a+r.rev,0),op=M.rows.reduce((a,r)=>a+r.op,0),end=M.rows[11].cum;
+  $('simKpis').innerHTML=[['12 month revenue',money(rev)],['12 month operating profit',money(op)],['Cash balance, month 12',money(end)],['Payback',M.payback?'Month '+M.payback:'Not reached within 12 months'],['Scenario',S.scen]].map(([a,b])=>`<div class="kpi"><b class="${/^−/.test(b)?'neg':''}">${b}</b><span>${a}</span></div>`).join('');
+  const r=M.rows,n=r.length;
+  const h=[['Month',...r.map(x=>x.m)],['Bags sold',...r.map(x=>x.bags)],['Revenue',...r.map(x=>x.rev)],['Packaging',...r.map(x=>x.pkg)],['Chaff',...r.map(x=>x.chaff)],['Labor and processing',...r.map(x=>x.labor)],['Gross profit',...r.map(x=>x.gross)],['Transportation',...r.map(x=>x.trans)],['Testing and misc',...r.map(x=>x.testing)],['Marketing',...r.map(x=>x.mkt)],['Other operating',...r.map(x=>x.otherOpex)],['Operating profit before uncosted items, depreciation and tax',...r.map(x=>x.op)],['Cash flow',...r.map(x=>x.cash)],['Cumulative cash flow',...r.map(x=>x.cum)]];
+  $('simTable').innerHTML=h.map((row,i)=>`<tr class="${[6,11,13].includes(i)?'hl':''}">${row.map((c,j)=>j===0?`<td>${c}</td>`:(i===0?`<th>M${c}</th>`:i===1?`<td>${c}</td>`:`<td class="${c<0?'neg':''}">${money(c)}</td>`)).join('')}</tr>`).join('')+`<tr><td colspan="13" class="muted" style="text-align:left;font-size:12px;border:0">Month 0 cash flow: ${money(M.m0.cash)} (equipment, other startup, working capital${S.mktTiming==='upfront'?', marketing paid upfront':''}). CAPEX is never deducted as a monthly operating expense.</td></tr>`;
+  // reference table with starting inputs only
+  const ref=['Low','Base','High'].map(k=>{const T=JSON.parse(JSON.stringify(SEED_SIM));T.scen=k;return simModel(T).rows[0]});
+  const rr=[['Monthly result during months 1 to 3','Low','Base','High'],['Revenue',...ref.map(x=>x.rev)],['Packaging',...ref.map(x=>x.pkg)],['Transportation',...ref.map(x=>x.trans)],['Testing and miscellaneous',...ref.map(x=>x.testing)],['Marketing',...ref.map(x=>x.mkt)],['Operating profit before uncosted items, depreciation and tax',...ref.map(x=>x.op)]];
+  $('simRefTable').innerHTML=rr.map((row,i)=>`<tr>${row.map((c,j)=>i===0?`<th>${c}</th>`:j===0?`<td>${c}</td>`:`<td class="${c<0?'neg':''}">${money(c)}</td>`).join('')}</tr>`).join('');
+  // charts
+  const W=520,H=220,P={l:48,r:10,t:10,b:26};
+  const cost=r.map(x=>x.product+x.opex);
+  const max1=Math.max(1,...r.map(x=>x.rev),...cost);
+  const y1=v=>P.t+(H-P.t-P.b)*(1-v/max1), bw=(W-P.l-P.r)/n;
+  let c1=`<svg viewBox="0 0 ${W} ${H}">`;
+  [0,.5,1].forEach(f=>{const y=y1(max1*f);c1+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.08)"/><text x="${P.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#a79b8f">$${Math.round(max1*f)}</text>`});
+  r.forEach((x,i)=>{const x0=P.l+i*bw;c1+=`<rect x="${x0+bw*.12}" y="${y1(x.rev)}" width="${bw*.34}" height="${y1(0)-y1(x.rev)}" fill="#9ad878" rx="2"/><rect x="${x0+bw*.52}" y="${y1(cost[i])}" width="${bw*.34}" height="${y1(0)-y1(cost[i])}" fill="#dba45a" rx="2"/><text x="${x0+bw/2}" y="${H-8}" text-anchor="middle" font-size="10" fill="#a79b8f">${x.m}</text>`});
+  c1+=`<rect x="${P.l}" y="${H-4}" width="10" height="3" fill="#9ad878"/><text x="${P.l+14}" y="${H-1}" font-size="10" fill="#a79b8f">Revenue</text><rect x="${P.l+70}" y="${H-4}" width="10" height="3" fill="#dba45a"/><text x="${P.l+84}" y="${H-1}" font-size="10" fill="#a79b8f">Total cost</text></svg>`;
+  $('chart1').innerHTML=c1;
+  const pts=[M.m0.cum,...r.map(x=>x.cum)];const lo=Math.min(0,...pts),hi=Math.max(0,...pts)||1;
+  const y2=v=>P.t+(H-P.t-P.b)*(1-(v-lo)/(hi-lo||1)), x2=i=>P.l+(W-P.l-P.r)*i/12;
+  let c2=`<svg viewBox="0 0 ${W} ${H}">`;
+  [lo,0,hi].forEach(v=>{const y=y2(v);c2+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}" stroke="${v===0?'rgba(255,255,255,.45)':'rgba(255,255,255,.08)'}" stroke-dasharray="${v===0?'4 3':''}"/><text x="${P.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#a79b8f">$${Math.round(v)}</text>`});
+  c2+=`<polyline fill="none" stroke="#9ad878" stroke-width="2" points="${pts.map((v,i)=>x2(i)+','+y2(v)).join(' ')}"/>`;
+  pts.forEach((v,i)=>{c2+=`<circle cx="${x2(i)}" cy="${y2(v)}" r="3" fill="${v<0?'#dba45a':'#9ad878'}"/><text x="${x2(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#a79b8f">${i}</text>`});
+  if(M.payback)c2+=`<text x="${x2(M.payback)}" y="${y2(pts[M.payback])-8}" text-anchor="middle" font-size="10" fill="#9ad878">payback</text>`;
+  c2+=`</svg>`;$('chart2').innerHTML=c2;
+}
+function renderAll(){migrate();renderFunnel();renderContacts();renderCanvas();renderSnap();renderFinance();renderSim()}
 </script>
 </body>
 </html>
