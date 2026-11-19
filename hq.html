@@ -467,7 +467,7 @@ const KPI_FIELDS=[['contacted','Contacted this week'],['leads','Leads this week'
 /* ---------- STORAGE ---------- */
 const K='chaffe_hq_v3';
 let db;
-const seed=()=>({leads:SEED_LEADS.map((l,i)=>({id:'l'+i,...l})),contacts:SEED_CONTACTS.map((c,i)=>({id:'c'+i,...c})),canvas:Object.fromEntries(CANVAS_BLOCKS.map(b=>[b[0],b[3]])),snap:Object.fromEntries(SNAP_FIELDS.map(f=>[f[0],f[2]])),kpis:{},finance:JSON.parse(JSON.stringify(SEED_FINANCE)),brand:{social:{instagram:'',tiktok:'',linkedin:'',website:'https://chaffe.slatebeirut.com'}}});
+const seed=()=>({leads:SEED_LEADS.map((l,i)=>({id:'l'+i,...l})),contacts:SEED_CONTACTS.map((c,i)=>({id:'c'+i,...c})),canvas:Object.fromEntries(CANVAS_BLOCKS.map(b=>[b[0],b[3]])),snap:Object.fromEntries(SNAP_FIELDS.map(f=>[f[0],f[2]])),kpis:{},finance:JSON.parse(JSON.stringify(SEED_FINANCE)),brand:{social:{instagram:'https://www.instagram.com/chaffe.lb',tiktok:'',linkedin:'',website:'https://chaffe.slatebeirut.com'}}});
 const CLOUD=!!(SUPABASE_URL&&SUPABASE_ANON_KEY);
 let sb=null,saving=false;
 async function load(){
@@ -757,7 +757,7 @@ function renderBrand(){
   if(!db.brand)db.brand={social:{}};if(!db.brand.social)db.brand.social={};
   document.getElementById('swatches').innerHTML=PALETTE.map(([h,n])=>`<button data-hex="${h}" title="Copy"><i style="background:${h}"></i>${n}<br><span class="muted">${h}</span></button>`).join('');
   document.querySelectorAll('#swatches button').forEach(b=>b.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(b.dataset.hex);toast('Copied '+b.dataset.hex)});
-  const S=db.brand.social;
+  const S=db.brand.social;if(!S.instagram)S.instagram='https://www.instagram.com/chaffe.lb';if(!S.website)S.website='https://chaffe.slatebeirut.com';
   document.getElementById('socials').innerHTML=SOCIALS.map(([k,n,role,ph])=>`<label><span>${n}<small>${role}</small></span><input type="url" data-soc="${k}" placeholder="${ph}" value="${esc(S[k]||'')}">${S[k]?`<a class="btn sm" href="${esc(S[k])}" target="_blank" rel="noopener">Open</a>`:'<span></span>'}</label>`).join('');
   document.querySelectorAll('[data-soc]').forEach(i=>{i.oninput=()=>{S[i.dataset.soc]=i.value.trim();deb(()=>save(['brand']),'brandSaved')};i.onchange=renderBrand});
 }
