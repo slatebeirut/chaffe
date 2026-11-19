@@ -5,21 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Chaffe HQ</title>
+<link rel="icon" href="assets/logo-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
-:root{--bg:#0c0a08;--bg2:#141009;--panel:#1b1611;--line:rgba(255,255,255,.09);--text:#f4eee6;--muted:#a79b8f;--accent:#9ad878;--accent2:#dba45a;--red:#e07a6a;--radius:16px}
+:root{--bg:#EDE5D8;--bg2:#E6DCCB;--panel:#F7F2EA;--line:rgba(91,58,36,.16);--text:#5B3A24;--muted:#7A6657;--accent:#6B8F3A;--accent2:#A67C3D;--red:#B5482F;--radius:16px}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
+body{font-family:Montserrat,system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.45;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:500;letter-spacing:-.02em;line-height:1.1}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em;line-height:1.1}
 button{font:inherit;cursor:pointer}
-input,select,textarea{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;outline:none}
+input,select,textarea{font:inherit;color:var(--text);background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid var(--line);background:var(--panel);color:var(--text);white-space:nowrap}
-.btn.p{background:var(--accent);color:#0c0a08;border-color:transparent}
+.btn.p{background:var(--accent);color:#fff;border-color:transparent}
 .btn.sm{padding:6px 11px;font-size:12px}
 .btn.danger{color:var(--red)}
 .muted{color:var(--muted)}
@@ -33,9 +34,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--accent)}
 #gate .err{color:var(--red);font-size:13px;min-height:18px}
 
 /* layout */
-header{position:sticky;top:0;z-index:20;background:rgba(12,10,8,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:20;background:rgba(237,229,216,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 header .in{max-width:1400px;margin:0 auto;padding:0 20px;height:62px;display:flex;align-items:center;gap:20px}
-.logo{display:flex;align-items:center;gap:9px;font-family:Fraunces,serif;font-size:20px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:20px}
 .logo svg{width:26px;height:26px}
 .tabs{display:flex;gap:4px;margin-left:12px}
 .tabs button{background:none;border:0;color:var(--muted);padding:8px 14px;border-radius:999px;font-size:14px}
@@ -48,18 +49,18 @@ main{max-width:1400px;margin:0 auto;padding:28px 20px 80px}
 .bar p{color:var(--muted);font-size:14px;margin-top:4px}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
 .kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
-.kpi b{display:block;font-family:Fraunces,serif;font-size:30px;font-weight:500}
+.kpi b{display:block;font-weight:800;font-size:30px;font-weight:500}
 .kpi span{font-size:12px;color:var(--muted)}
 
 /* funnel board */
 .board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:12px;overflow-x:auto;padding-bottom:12px}
 .col{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);min-height:360px;display:flex;flex-direction:column}
-.col h3{font-size:15px;padding:14px 14px 6px;display:flex;justify-content:space-between;align-items:center;font-family:Inter,sans-serif;font-weight:600}
+.col h3{font-size:15px;padding:14px 14px 6px;display:flex;justify-content:space-between;align-items:center;font-weight:600}
 .col h3 small{color:var(--muted);font-weight:400;font-size:12px}
 .col .def{font-size:11px;color:var(--muted);padding:0 14px 10px;border-bottom:1px solid var(--line)}
 .col .list{padding:10px;display:grid;gap:8px;align-content:start;flex:1}
 .lead{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;cursor:pointer;transition:.2s}
-.lead:hover{border-color:rgba(154,216,120,.5)}
+.lead:hover{border-color:rgba(107,143,58,.5)}
 .lead b{display:block;font-size:14px}
 .lead .m{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
 .lead .seg{font-size:11px;color:var(--accent2)}
@@ -71,15 +72,15 @@ main{max-width:1400px;margin:0 auto;padding:28px 20px 80px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
-tr:hover td{background:rgba(255,255,255,.02)}
+tr:hover td{background:rgba(91,58,36,.04)}
 .tbl{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:auto}
 
 /* canvas */
 .canvas{display:grid;grid-template-columns:repeat(10,1fr);gap:10px}
 .block{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;min-height:150px}
-.block.adv{border-color:rgba(219,164,90,.35)}
+.block.adv{border-color:rgba(166,124,61,.35)}
 .block h4{font-size:13px;display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.block h4 i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:600;background:var(--accent);color:#0c0a08}
+.block h4 i{font-style:normal;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:10px;font-weight:600;background:var(--accent);color:#fff}
 .block.adv h4 i{background:var(--accent2)}
 .block small{display:block;font-size:11px;color:var(--muted);margin-bottom:8px}
 .block textarea{background:transparent;border:0;padding:0;min-height:90px;resize:vertical;font-size:13px;line-height:1.5;border-radius:0}
@@ -107,7 +108,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .fin{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .fin td input{background:transparent;border:0;border-radius:0;padding:4px 0}
 .fin td input.n{text-align:right;font-variant-numeric:tabular-nums}
-.fin .tot{text-align:right;font-family:Fraunces,serif;font-size:20px}
+.fin .tot{text-align:right;font-weight:800;font-size:20px}
 .fin tfoot td{border-bottom:0;padding-top:14px}
 .fin .x{background:none;border:0;color:var(--muted);font-size:16px}
 @media(max-width:900px){.fin{grid-template-columns:1fr}}
@@ -120,16 +121,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .inp input,.inp select{padding:7px 9px;font-size:13px;text-align:right}
 .inp select{text-align:left}
 .st{display:inline-block;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:2px 6px;border-radius:999px;margin-left:6px;vertical-align:middle}
-.st.a{background:rgba(154,216,120,.15);color:var(--accent)}
-.st.q{background:rgba(219,164,90,.15);color:var(--accent2)}
-.st.e{background:rgba(255,255,255,.08);color:var(--muted)}
+.st.a{background:rgba(107,143,58,.15);color:var(--accent)}
+.st.q{background:rgba(166,124,61,.15);color:var(--accent2)}
+.st.e{background:rgba(91,58,36,.12);color:var(--muted)}
 .ref{font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5}
-.warn{display:none;background:rgba(224,122,106,.12);border:1px solid rgba(224,122,106,.4);color:#f0a79a;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px}
+.warn{display:none;background:rgba(224,122,106,.12);border:1px solid rgba(224,122,106,.4);color:#B5482F;border-radius:12px;padding:10px 14px;font-size:13px;margin-bottom:14px}
 .warn.on{display:block}
 .scen{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:12px}
 .seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
 .seg button{background:none;border:0;color:var(--muted);padding:7px 14px;font-size:13px}
-.seg button.on{background:var(--accent);color:#0c0a08;font-weight:600}
+.seg button.on{background:var(--accent);color:#fff;font-weight:600}
 .months{display:grid;grid-template-columns:repeat(12,1fr);gap:6px}
 .months label{display:grid;gap:4px;text-align:center;font-size:10px;letter-spacing:.06em}
 .months input{padding:6px 4px;text-align:center;font-size:13px}
@@ -137,20 +138,52 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .charts svg{width:100%;height:auto;display:block}
 #simTable td,#simTable th,#simRefTable td,#simRefTable th{text-align:right;white-space:nowrap;padding:9px 10px}
 #simTable td:first-child,#simTable th:first-child,#simRefTable td:first-child,#simRefTable th:first-child{text-align:left}
-#simTable tr.hl td{font-weight:600;background:rgba(255,255,255,.03)}
-.neg{color:#f0a79a}
+#simTable tr.hl td{font-weight:600;background:rgba(91,58,36,.06)}
+.neg{color:#B5482F}
 @media(max-width:1100px){.simgrid{grid-template-columns:1fr 1fr}.months{grid-template-columns:repeat(6,1fr)}}
 @media(max-width:900px){.simgrid,.charts{grid-template-columns:1fr}.months{grid-template-columns:repeat(4,1fr)}}
 
+/* brand and journey */
+.bgrid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bgrid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.bgrid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.sbox p{font-size:14px}
+.lead2{font-size:17px!important;font-weight:600;line-height:1.45}
+.logoBox{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#EDE5D8}
+.logoBox img{width:min(360px,80%)}
+.dl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.sw{display:flex;gap:14px}
+.sw button{flex:1;background:none;border:0;text-align:left;color:var(--text);font-size:12px;font-weight:600}
+.sw i{display:block;height:64px;border-radius:12px;border:1px solid var(--line);margin-bottom:6px}
+.voice{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.voice b{display:block;font-size:16px}.voice span{font-size:13px;color:var(--muted)}
+.vidwrap{width:min(280px,100%);aspect-ratio:9/16;border-radius:20px;overflow:hidden;border:6px solid var(--text);background:#EDE5D8}
+.vidwrap video{width:100%;height:100%;object-fit:cover;display:block}
+.soc{display:grid;gap:10px}
+.soc label{grid-template-columns:150px 1fr auto;display:grid;align-items:center;gap:10px;text-transform:none;letter-spacing:0;font-size:13px;color:var(--text)}
+.soc label small{display:block;font-weight:400;color:var(--muted);font-size:11px}
+.ol{padding-left:18px;display:grid;gap:6px;font-size:14px}
+.jmap{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(230px,1fr);gap:12px;overflow-x:auto;padding-bottom:10px}
+.jst{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:10px}
+.jst .n{font-size:11px;font-weight:800;color:var(--accent2);letter-spacing:.1em}
+.jst h3{font-size:18px}
+.jst dl{display:grid;gap:8px;font-size:13px}
+.jst dt{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.jst .fix{margin-top:auto;background:rgba(107,143,58,.12);border-radius:10px;padding:10px;font-size:13px;font-weight:600;color:#4C6A28}
+.jh{font-size:20px;margin:34px 0 12px}
+.pr{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+.pr.High,.pr.now{background:var(--accent2);color:#fff}.pr.Medium,.pr.next{background:rgba(91,58,36,.1);color:var(--muted)}.pr.done{background:rgba(107,143,58,.16);color:#4C6A28}
+@media(max-width:900px){.bgrid2,.bgrid3,.bgrid4,.voice{grid-template-columns:1fr}.soc label{grid-template-columns:1fr}}
+
 /* modal */
-#modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;place-items:center;z-index:50;padding:16px}
+#modal{position:fixed;inset:0;background:rgba(59,38,22,.55);display:none;place-items:center;z-index:50;padding:16px}
 #modal.on{display:grid}
 #modal form{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:28px;width:min(640px,100%);display:grid;gap:12px;max-height:92vh;overflow:auto}
 #modal h3{font-size:24px}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .mrow{display:flex;justify-content:space-between;gap:10px;margin-top:6px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent);color:#0c0a08;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:600;opacity:0;transition:.3s;pointer-events:none}
 .toast.on{opacity:1}
 @media(max-width:900px){.canvas{grid-template-columns:1fr 1fr}.canvas .block{grid-column:span 1!important;grid-row:auto!important}.snap{grid-template-columns:1fr}.sbox.wide{grid-column:span 1}.g2{grid-template-columns:1fr}.tabs{overflow:auto}.leak div{grid-template-columns:1fr}}
 </style>
@@ -159,7 +192,7 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
 
 <div id="gate">
   <form id="gateForm">
-    <h1>Chaffe HQ</h1>
+    <img src="assets/logo.png" alt="Chaffe" style="width:210px;margin:0 auto 4px"><h1 style="font-size:20px">Team HQ</h1>
     <p id="gateHint">Sign in. New here? Add the invite code and your account is created.</p>
     <input type="email" id="email" placeholder="Email" autocomplete="username" autofocus>
     <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
@@ -171,13 +204,15 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
 
 <header>
   <div class="in">
-    <a href="index.html" class="logo"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16a12 12 0 0 1 20-9" stroke="#dba45a"/><path d="M28 16a12 12 0 0 1-20 9" stroke="#9ad878"/><path d="M24 3v4h-4" stroke="#dba45a"/><path d="M8 29v-4h4" stroke="#9ad878"/><circle cx="16" cy="16" r="3" fill="currentColor" stroke="none"/></svg>Chaffe HQ</a>
+    <a href="index.html" class="logo"><img src="assets/logo-mark.png" alt="Chaffe" style="height:38px"><span style="font-weight:800;font-size:15px;letter-spacing:.08em">HQ</span></a>
     <nav class="tabs">
       <button data-v="funnel" class="on">Funnel</button>
       <button data-v="contacts">Contacts</button>
       <button data-v="canvas">Canvas</button>
       <button data-v="snapshot">Snapshot</button>
       <button data-v="finance">Finance</button>
+      <button data-v="brand">Brand</button>
+      <button data-v="journey">Journey</button>
     </nav>
     <div class="right">
       <button class="btn sm" id="exportBtn">Export</button>
@@ -279,6 +314,61 @@ label{display:grid;gap:6px;font-size:11px;letter-spacing:.08em;text-transform:up
   <div class="sbox" style="margin-top:14px"><h4>Reference check, months 1 to 3, starting inputs only</h4><div class="tbl"><table id="simRefTable"></table></div></div>
 </section>
 
+<!-- BRAND -->
+<section class="view" id="v-brand">
+  <div class="bar"><div><h2>Brand</h2><p>Logo, guidelines, marketing video and social accounts.</p></div><span class="tag" id="brandSaved">Saved</span></div>
+  <div class="bgrid2">
+    <div class="sbox logoBox">
+      <img src="assets/logo.png" alt="Chaffe logo">
+      <div class="dl"><a class="btn sm" href="assets/logo.png" download>Logo with tagline</a><a class="btn sm" href="assets/logo-mark.png" download>Logo only</a><a class="btn sm" href="assets/brand-guidelines.jpg" download>Guidelines sheet</a></div>
+    </div>
+    <div class="sbox">
+      <h4>In one sentence</h4>
+      <p class="lead2">Chaffe transforms coffee roasting chaff into a sustainable soil amendment for farmers seeking more circular, resource-efficient practices.</p>
+      <h4 style="margin-top:22px">Positioning</h4>
+      <p>A natural, eco-friendly soil amendment under development for small and medium-scale farmers who value sustainable and low-cost solutions.</p>
+      <h4 style="margin-top:22px">Tagline</h4>
+      <p style="font-style:italic;font-weight:600">From Coffee Waste to Greener Growth.</p>
+    </div>
+  </div>
+  <div class="bgrid3">
+    <div class="sbox"><h4>Colour palette</h4><div class="sw" id="swatches"></div></div>
+    <div class="sbox"><h4>Typography</h4><p style="font-weight:800;font-size:26px;line-height:1.2">Montserrat Bold</p><p style="font-size:20px">Montserrat Regular</p><p class="muted" style="font-size:12px;margin-top:10px">Bold for headings, regular for body text.</p></div>
+    <div class="sbox"><h4>Icon and image style</h4><p>Simple line icons: leaf, recycling loop, farmer.</p><p style="margin-top:8px">Real, earthy photos only: farm, soil, coffee chaff, plants.</p></div>
+  </div>
+  <div class="sbox" style="margin-top:14px"><h4>Voice and messaging</h4><div class="voice">
+    <div><b>Natural</b><span>Inspired by organic cycles</span></div><div><b>Innovative</b><span>Turning waste into value</span></div><div><b>Trustworthy</b><span>Transparent and honest</span></div><div><b>Impact-driven</b><span>Supporting sustainable farming</span></div></div></div>
+  <div class="bgrid2" style="margin-top:14px">
+    <div class="sbox">
+      <h4>Marketing video, 30 seconds</h4>
+      <div class="vidwrap"><video src="assets/chaffe-30s.mp4" poster="assets/video-poster.jpg" controls playsinline preload="metadata"></video></div>
+      <div class="dl"><a class="btn sm p" href="assets/chaffe-30s.mp4" download>Download MP4</a><span class="muted" style="font-size:12px">1080 × 1920, ready for Instagram and TikTok. No sound yet.</span></div>
+    </div>
+    <div>
+      <div class="sbox"><h4>Social media accounts</h4><div class="soc" id="socials"></div></div>
+      <div class="sbox" style="margin-top:14px"><h4>Usage guide, pilot</h4>
+        <ol class="ol"><li><b>Mix.</b> Blend Chaffe with soil or compost.</li><li><b>Apply.</b> Use in potted plants or small field plots.</li><li><b>Test and monitor.</b> Observe plant growth and soil response over time.</li></ol>
+        <p class="muted" style="font-size:12px;margin-top:10px">Preliminary guidelines for prototype testing. Final usage rates and claims come after laboratory and field validation.</p></div>
+      <div class="sbox" style="margin-top:14px"><h4>What we measure in month 1</h4>
+        <ul class="ol"><li><b>Reach:</b> page growth and video views</li><li><b>Interest:</b> inquiries and requests for samples</li><li><b>Engagement:</b> comments, shares and farmer feedback</li></ul></div>
+    </div>
+  </div>
+  <div class="sbox" style="margin-top:14px"><h4>Full guidelines sheet</h4><img src="assets/brand-guidelines.jpg" alt="Chaffe brand guidelines" style="width:100%;border-radius:12px" loading="lazy"></div>
+</section>
+
+<!-- JOURNEY -->
+<section class="view" id="v-journey">
+  <div class="bar"><div><h2>Customer journey</h2><p>What a customer goes through with Chaffe, where it can go wrong, and what we do about it.</p></div></div>
+  <div class="jmap" id="jmap"></div>
+  <h3 class="jh">Moments of truth</h3><div class="bgrid4" id="jmoments"></div>
+  <h3 class="jh">Where customers get stuck</h3><div class="tbl"><table id="jfriction"></table></div>
+  <div class="sbox" style="margin-top:14px;border-color:var(--accent2)"><h4>Priority right now: packaging</h4><p>The pack has to look like Chaffe and be easy to recognise, understand and use. It must state the ingredients, what the product is for, and how to apply it.</p></div>
+  <h3 class="jh">Service blueprint</h3><div class="tbl"><table id="jblue"></table></div>
+  <h3 class="jh">Keeping customers</h3><div class="bgrid4" id="jkeep"></div>
+  <h3 class="jh">How we measure the experience</h3><div class="tbl"><table id="jkpi"></table></div><p class="muted" style="font-size:12px;margin-top:8px">Tracking starts with the first customer transactions.</p>
+  <h3 class="jh">Progress</h3><div class="tbl"><table id="jprog"></table></div>
+</section>
+
 </main>
 
 <div id="modal"><form id="leadForm"></form></div>
@@ -377,7 +467,7 @@ const KPI_FIELDS=[['contacted','Contacted this week'],['leads','Leads this week'
 /* ---------- STORAGE ---------- */
 const K='chaffe_hq_v3';
 let db;
-const seed=()=>({leads:SEED_LEADS.map((l,i)=>({id:'l'+i,...l})),contacts:SEED_CONTACTS.map((c,i)=>({id:'c'+i,...c})),canvas:Object.fromEntries(CANVAS_BLOCKS.map(b=>[b[0],b[3]])),snap:Object.fromEntries(SNAP_FIELDS.map(f=>[f[0],f[2]])),kpis:{},finance:JSON.parse(JSON.stringify(SEED_FINANCE))});
+const seed=()=>({leads:SEED_LEADS.map((l,i)=>({id:'l'+i,...l})),contacts:SEED_CONTACTS.map((c,i)=>({id:'c'+i,...c})),canvas:Object.fromEntries(CANVAS_BLOCKS.map(b=>[b[0],b[3]])),snap:Object.fromEntries(SNAP_FIELDS.map(f=>[f[0],f[2]])),kpis:{},finance:JSON.parse(JSON.stringify(SEED_FINANCE)),brand:{social:{instagram:'',tiktok:'',linkedin:'',website:'https://chaffe.slatebeirut.com'}}});
 const CLOUD=!!(SUPABASE_URL&&SUPABASE_ANON_KEY);
 let sb=null,saving=false;
 async function load(){
@@ -647,20 +737,58 @@ function renderSimOut(){
   const max1=Math.max(1,...r.map(x=>x.rev),...cost);
   const y1=v=>P.t+(H-P.t-P.b)*(1-v/max1), bw=(W-P.l-P.r)/n;
   let c1=`<svg viewBox="0 0 ${W} ${H}">`;
-  [0,.5,1].forEach(f=>{const y=y1(max1*f);c1+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}" stroke="rgba(255,255,255,.08)"/><text x="${P.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#a79b8f">$${Math.round(max1*f)}</text>`});
-  r.forEach((x,i)=>{const x0=P.l+i*bw;c1+=`<rect x="${x0+bw*.12}" y="${y1(x.rev)}" width="${bw*.34}" height="${y1(0)-y1(x.rev)}" fill="#9ad878" rx="2"/><rect x="${x0+bw*.52}" y="${y1(cost[i])}" width="${bw*.34}" height="${y1(0)-y1(cost[i])}" fill="#dba45a" rx="2"/><text x="${x0+bw/2}" y="${H-8}" text-anchor="middle" font-size="10" fill="#a79b8f">${x.m}</text>`});
-  c1+=`<rect x="${P.l}" y="${H-4}" width="10" height="3" fill="#9ad878"/><text x="${P.l+14}" y="${H-1}" font-size="10" fill="#a79b8f">Revenue</text><rect x="${P.l+70}" y="${H-4}" width="10" height="3" fill="#dba45a"/><text x="${P.l+84}" y="${H-1}" font-size="10" fill="#a79b8f">Total cost</text></svg>`;
+  [0,.5,1].forEach(f=>{const y=y1(max1*f);c1+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}" stroke="rgba(91,58,36,.12)"/><text x="${P.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#7A6657">$${Math.round(max1*f)}</text>`});
+  r.forEach((x,i)=>{const x0=P.l+i*bw;c1+=`<rect x="${x0+bw*.12}" y="${y1(x.rev)}" width="${bw*.34}" height="${y1(0)-y1(x.rev)}" fill="#6B8F3A" rx="2"/><rect x="${x0+bw*.52}" y="${y1(cost[i])}" width="${bw*.34}" height="${y1(0)-y1(cost[i])}" fill="#C9A26B" rx="2"/><text x="${x0+bw/2}" y="${H-8}" text-anchor="middle" font-size="10" fill="#7A6657">${x.m}</text>`});
+  c1+=`<rect x="${P.l}" y="${H-4}" width="10" height="3" fill="#6B8F3A"/><text x="${P.l+14}" y="${H-1}" font-size="10" fill="#7A6657">Revenue</text><rect x="${P.l+70}" y="${H-4}" width="10" height="3" fill="#C9A26B"/><text x="${P.l+84}" y="${H-1}" font-size="10" fill="#7A6657">Total cost</text></svg>`;
   $('chart1').innerHTML=c1;
   const pts=[M.m0.cum,...r.map(x=>x.cum)];const lo=Math.min(0,...pts),hi=Math.max(0,...pts)||1;
   const y2=v=>P.t+(H-P.t-P.b)*(1-(v-lo)/(hi-lo||1)), x2=i=>P.l+(W-P.l-P.r)*i/12;
   let c2=`<svg viewBox="0 0 ${W} ${H}">`;
-  [lo,0,hi].forEach(v=>{const y=y2(v);c2+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}" stroke="${v===0?'rgba(255,255,255,.45)':'rgba(255,255,255,.08)'}" stroke-dasharray="${v===0?'4 3':''}"/><text x="${P.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#a79b8f">$${Math.round(v)}</text>`});
-  c2+=`<polyline fill="none" stroke="#9ad878" stroke-width="2" points="${pts.map((v,i)=>x2(i)+','+y2(v)).join(' ')}"/>`;
-  pts.forEach((v,i)=>{c2+=`<circle cx="${x2(i)}" cy="${y2(v)}" r="3" fill="${v<0?'#dba45a':'#9ad878'}"/><text x="${x2(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#a79b8f">${i}</text>`});
-  if(M.payback)c2+=`<text x="${x2(M.payback)}" y="${y2(pts[M.payback])-8}" text-anchor="middle" font-size="10" fill="#9ad878">payback</text>`;
+  [lo,0,hi].forEach(v=>{const y=y2(v);c2+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}" stroke="${v===0?'rgba(91,58,36,.55)':'rgba(91,58,36,.12)'}" stroke-dasharray="${v===0?'4 3':''}"/><text x="${P.l-6}" y="${y+4}" text-anchor="end" font-size="10" fill="#7A6657">$${Math.round(v)}</text>`});
+  c2+=`<polyline fill="none" stroke="#6B8F3A" stroke-width="2" points="${pts.map((v,i)=>x2(i)+','+y2(v)).join(' ')}"/>`;
+  pts.forEach((v,i)=>{c2+=`<circle cx="${x2(i)}" cy="${y2(v)}" r="3" fill="${v<0?'#C9A26B':'#6B8F3A'}"/><text x="${x2(i)}" y="${H-8}" text-anchor="middle" font-size="10" fill="#7A6657">${i}</text>`});
+  if(M.payback)c2+=`<text x="${x2(M.payback)}" y="${y2(pts[M.payback])-8}" text-anchor="middle" font-size="10" fill="#6B8F3A">payback</text>`;
   c2+=`</svg>`;$('chart2').innerHTML=c2;
 }
-function renderAll(){migrate();renderFunnel();renderContacts();renderCanvas();renderSnap();renderFinance();renderSim()}
+/* ---------- BRAND ---------- */
+const PALETTE=[['#5B3A24','Coffee brown'],['#6B8F3A','Leaf green'],['#EDE5D8','Cream']];
+const SOCIALS=[['instagram','Instagram','Awareness and journey','https://instagram.com/...'],['tiktok','TikTok','Short educational videos','https://tiktok.com/@...'],['linkedin','LinkedIn','Impact and partnerships','https://linkedin.com/company/...'],['website','Website','Product, testing results, inquiries','https://']];
+function renderBrand(){
+  if(!db.brand)db.brand={social:{}};if(!db.brand.social)db.brand.social={};
+  document.getElementById('swatches').innerHTML=PALETTE.map(([h,n])=>`<button data-hex="${h}" title="Copy"><i style="background:${h}"></i>${n}<br><span class="muted">${h}</span></button>`).join('');
+  document.querySelectorAll('#swatches button').forEach(b=>b.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(b.dataset.hex);toast('Copied '+b.dataset.hex)});
+  const S=db.brand.social;
+  document.getElementById('socials').innerHTML=SOCIALS.map(([k,n,role,ph])=>`<label><span>${n}<small>${role}</small></span><input type="url" data-soc="${k}" placeholder="${ph}" value="${esc(S[k]||'')}">${S[k]?`<a class="btn sm" href="${esc(S[k])}" target="_blank" rel="noopener">Open</a>`:'<span></span>'}</label>`).join('');
+  document.querySelectorAll('[data-soc]').forEach(i=>{i.oninput=()=>{S[i.dataset.soc]=i.value.trim();deb(()=>save(['brand']),'brandSaved')};i.onchange=renderBrand});
+}
+/* ---------- CUSTOMER JOURNEY ---------- */
+const JOURNEY=[
+ ['Trigger','Needs a soil amendment for plants or crops.','Farming and gardening needs','Interested','Knows little about recycled alternatives','Introduce Chaffe as a sustainable soil amendment.'],
+ ['Discover','Finds Chaffe on Instagram, in our video, or through someone they know.','Instagram, Turbo Vision video, word of mouth','Curious','Chaffe is a new brand','Show the logo, the product story, the prototype and our mission.'],
+ ['Consider','Looks at what is in the product and what the tests say.','Product info, lab report, packaging','Interested but cautious','Unsure about a new coffee chaff product','Explain the 30% chaff, 70% organic fertilizer mix and share verified test results.'],
+ ['Buy','Contacts us to order.','WhatsApp, Instagram','Hopeful','Unclear prices or ordering steps','Clear prices, pack sizes and simple ordering steps.'],
+ ['Receive','Gets Chaffe in its branded pack.','Delivery, packaging, label','Excited','Damaged pack or missing information','Secure, good looking pack with ingredients and clear instructions.'],
+ ['First use','Applies Chaffe to their soil.','Pack instructions, usage guide','Curious and expectant','Unsure how to apply it correctly','Application guidance based on completed, verified testing.'],
+ ['Get help','Reaches out with a question or feedback.','WhatsApp, Instagram','Reassured when supported','Slow replies or unresolved concerns','Direct support, record the feedback, look into complaints.'],
+ ['Repeat and refer','Buys again and recommends us.','Follow-up messages, referrals, social media','Satisfied and loyal','Forgets to reorder, little incentive','Reminders, loyalty benefits later on, referral rewards.']
+];
+const MOMENTS=[['First reply','A friendly, professional answer covering ingredients, purpose, price and availability.'],['Delivery','Secure branded pack with clear labelling and product information.'],['First use','Simple, evidence-based instructions so the customer knows what to do.'],['First problem','Listen, look into it, and offer a fair solution.']];
+const FRICTION=[['Customers do not know coffee chaff soil amendments','High','Explain how the prototype was developed, the ingredients and the lab work.','High'],['Customers are unsure it works','High','Share verified test findings openly. No unsupported claims.','High'],['Packaging does not say enough','High','Clear labels with ingredients, usage guidance and contact details.','High'],['Ordering is difficult','Medium','Simplify WhatsApp ordering and state prices clearly.','Medium'],['Customers forget to buy again','Medium','Reorder reminders and follow-ups.','Medium']];
+const BLUEPRINT=[['Discover','Instagram posts and marketing video','Prepare content, coordinate with Turbo Vision','Logo, brand guidelines, social media'],['Consider','Product description and test information','Review lab documentation and product specs','Lab report, formulation records'],['Buy','Price quote and order confirmation','Confirm availability, packaging and delivery','WhatsApp, order records'],['Receive','Branded, labelled product','Prepare, pack, inspect and arrange delivery','Packaging materials, quality checklist'],['First use','Product instructions','Prepare validated guidance, collect observations','Usage guide, customer feedback'],['Get help','Customer support','Record complaints, decide corrective action','Customer service records'],['Repeat and refer','Reorder reminders and referral offers','Track repeat orders and satisfaction','Customer database']];
+const KEEP=[['Retention','Follow up after each purchase, send useful product information, ask customers to share their experience.'],['Loyalty','Explore a reward for repeat purchases, such as a discount or a free sample, once we know we can afford it.'],['Referral','Encourage happy customers to recommend Chaffe. A future offer could reward both the customer and the new buyer.'],['Feedback','Collect feedback on packaging, ease of use, product experience and service.']];
+const JKPI=[['Customer satisfaction','Feedback survey after product use'],['Response time','Average time to answer an inquiry'],['Repeat purchase rate','Customers who bought at least twice ÷ all buying customers × 100'],['Customer retention rate','(Customers at end − new customers) ÷ customers at start × 100'],['Complaint resolution rate','Resolved complaints ÷ total complaints × 100'],['Referral rate','New customers from referrals ÷ total new customers × 100']];
+const JPROG=[['Coffee chaff sourcing','done','Completed'],['Prototype preparation','done','Completed'],['Laboratory visit and testing','done','Completed'],['Preliminary laboratory report','done','Completed'],['Logo and brand identity','done','Completed'],['Instagram account and promotional content','done','Completed'],['Product packaging and labelling','now','In progress'],['Packaging evaluation','next','Next step'],['Customer trials and feedback','next','Planned'],['Commercial sales and retention tracking','next','Planned']];
+function renderJourney(){
+  const g=id=>document.getElementById(id),row=(cells,h)=>`<tr>${cells.map(c=>h?`<th>${c}</th>`:`<td>${c}</td>`).join('')}</tr>`;
+  g('jmap').innerHTML=JOURNEY.map((j,i)=>`<div class="jst"><span class="n">STAGE ${i+1}</span><h3>${j[0]}</h3><dl><div><dt>Customer</dt><dd>${j[1]}</dd></div><div><dt>Touchpoint</dt><dd>${j[2]}</dd></div><div><dt>Feels</dt><dd>${j[3]}</dd></div><div><dt>Friction</dt><dd>${j[4]}</dd></div></dl><div class="fix">${j[5]}</div></div>`).join('');
+  g('jmoments').innerHTML=MOMENTS.map(m=>`<div class="sbox"><h4>${m[0]}</h4><p>${m[1]}</p></div>`).join('');
+  g('jfriction').innerHTML=row(['Friction','Impact','What we do','Priority'],1)+FRICTION.map(f=>row([`<b>${f[0]}</b>`,f[1],f[2],`<span class="pr ${f[3]}">${f[3]}</span>`])).join('');
+  g('jblue').innerHTML=row(['Stage','What the customer sees','What we do behind it','What we rely on'],1)+BLUEPRINT.map(b=>row([`<b>${b[0]}</b>`,b[1],b[2],b[3]])).join('');
+  g('jkeep').innerHTML=KEEP.map(m=>`<div class="sbox"><h4>${m[0]}</h4><p>${m[1]}</p></div>`).join('');
+  g('jkpi').innerHTML=row(['KPI','How we measure it'],1)+JKPI.map(k=>row([`<b>${k[0]}</b>`,k[1]])).join('');
+  g('jprog').innerHTML=row(['Activity','Status'],1)+JPROG.map(k=>row([k[0],`<span class="pr ${k[1]}">${k[2]}</span>`])).join('');
+}
+function renderAll(){migrate();renderFunnel();renderContacts();renderCanvas();renderSnap();renderFinance();renderSim();renderBrand();renderJourney()}
 </script>
 </body>
 </html>
